@@ -6,19 +6,19 @@ laravel-project/
 ├── app/ NƠI LÀM VIỆC CHÍNH: Chứa logic cốt lõi của ứng dụng   
 │   ├── Http/ Xử lý giao diệnweb (Controllers, Middleware)  
 │   ├── Models/ Tương tác Database (Eloquent Models)    
-│   ├── Console/ Câu lệnh Artisan tùy chỉnh
+│   ├── Console/ Câu lệnh Artisan tùy chỉnh     
 │   ├── Providers/ Khởi tạo dịch vụ cho ứng dụng    
 │   └── ... (Broadcasting, Exceptions, Jobs, Listeners, Policies...)    
 │   
 ├── bootstrap/ Khởi động framework và cache hiệu năng   
 ├── config/ Cấu hình ứng dụng (database, app, mail...)  
-├── database/ Quản lý CSDL (Migrations, Seeders, Factories) 
-│
+├── database/ Quản lý CSDL (Migrations, Seeders, Factories)     
+│   
 ├── public/ CỬA NGÕ DUY NHẤT ra internet (index.php, CSS, JS)   
 │   
-├── resources/                   # Giao diện & tài nguyên thô
-│   ├── views/                   # Template Blade (.blade.php)
-│   ├── css/ & js/               # File nguồn (chạy qua Vite)
+├── resources/ Giao diện & tài nguyên thô       
+│   ├── views/ Template Blade (.blade.php)      
+│   ├── css/ & js/ File nguồn (chạy qua Vite)       
 │   
 │   
 ├── routes/ Định nghĩa URL  
@@ -29,7 +29,7 @@ laravel-project/
 ├── storage/ File hệ thống (log, cache, session, file upload)   
 ├── tests/ Code kiểm thử (Unit Test)    
 ├── vendor/ Thư viện composer (Không sửa thủ công)  
-├── .env: file biến môi trường
+├── .env: file biến môi trường      
 ├── .env.example: file biến môi trường mẫu, phục vụ cho cài đặt trên container (Vui lòng không chỉnh sửa thủ công)  
 └── README.md: Tài liệu hướng dẫn
 
