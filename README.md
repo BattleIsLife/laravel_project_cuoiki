@@ -1,59 +1,55 @@
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Cấu trúc thư mục của dự án
 
-## About Laravel
+laravel-project/    
+├── app/ NƠI LÀM VIỆC CHÍNH: Chứa logic cốt lõi của ứng dụng   
+│   ├── Http/ Xử lý giao diệnweb (Controllers, Middleware)  
+│   ├── Models/ Tương tác Database (Eloquent Models)    
+│   ├── Console/ Câu lệnh Artisan tùy chỉnh
+│   ├── Providers/ Khởi tạo dịch vụ cho ứng dụng    
+│   └── ... (Broadcasting, Exceptions, Jobs, Listeners, Policies...)    
+│   
+├── bootstrap/ Khởi động framework và cache hiệu năng   
+├── config/ Cấu hình ứng dụng (database, app, mail...)  
+├── database/ Quản lý CSDL (Migrations, Seeders, Factories) 
+│
+├── public/ CỬA NGÕ DUY NHẤT ra internet (index.php, CSS, JS)   
+│   
+├── resources/                   # Giao diện & tài nguyên thô
+│   ├── views/                   # Template Blade (.blade.php)
+│   ├── css/ & js/               # File nguồn (chạy qua Vite)
+│   
+│   
+├── routes/ Định nghĩa URL  
+│   ├── web.php: Route cho giao diện web    
+│   ├── api.php: Route cho API (cần cài đặt riêng)  
+│   └── console.php: Định nghĩa câu lệnh Artisan    
+│   
+├── storage/ File hệ thống (log, cache, session, file upload)   
+├── tests/ Code kiểm thử (Unit Test)    
+├── vendor/ Thư viện composer (Không sửa thủ công)  
+├── .env: file biến môi trường
+├── .env.example: file biến môi trường mẫu, phục vụ cho cài đặt trên container (Vui lòng không chỉnh sửa thủ công)  
+└── README.md: Tài liệu hướng dẫn
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Phòng tránh xung đột giữa branch của mình và main (trong trường hợp main đã có những commit mới)
+Trước khi yêu cầu hợp nhất branch của mình và main, hãy commit tất cả chỉnh sửa lên branch của mình trước rồi làm các bước sau:
+1. Sang branch main: `git checkout main`
+2. Pull các commit mới về main của mình: `git pull origin main`
+3. Về lại branch của mình: `git checkout tên_branch_của_mình`
+4. Merge main với branch của mình: `git merge main`
+5. Nếu xảy ra xung đột, hãy giải quyết xung đột (hoặc là hỏi nhóm trưởng để cùng sửa):
+   - Mở file bị xung đột lên, tìm các đoạn có `<<<<<<<`, `=======`, `>>>>>>>`
+   - Quyết định giữ phần code nào (của bạn hay của main, hoặc cả hai)
+   - Xóa các dòng `<<<<<<<`, `=======`, `>>>>>>>>`
+   - Lưu file lại
+6. Hoàn tất merge sau khi giải quyết xung đột 
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+```
+git add .
+git commit -m "Resolve merge conflicts"
+git push origin ten_branch_cua_ban
+```
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
-
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
-
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+7. Lúc này branch của bạn đã an toàn để tạo Merge Request
