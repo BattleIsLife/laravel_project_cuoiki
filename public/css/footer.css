@@ -1,0 +1,16 @@
+/*
+Source - https://stackoverflow.com/a
+Posted by Joseph Silber, modified by community. See post 'Timeline' for change history
+Retrieved 2026-01-19, License - CC BY-SA 3.0
+*/
+
+#footer {
+    padding: 10px;
+}
+
+
+#copyright
+{
+    color: rgba(255, 0, 0, 0.73);
+    font-weight: 500;
+}
