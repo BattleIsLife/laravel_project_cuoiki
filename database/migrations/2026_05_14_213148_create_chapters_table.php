@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('chapters', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('chapter_name', 100)->nullable(false);
+            $table->string('chapter_name', 100)->unique()->nullable(false);
             $table->smallInteger('chapter_order')->default(0);
             $table->foreignUuid('fiction_id')->references('id')->on('fictions')->onDelete('cascade');
             $table->mediumText('content')->nullable(true);
