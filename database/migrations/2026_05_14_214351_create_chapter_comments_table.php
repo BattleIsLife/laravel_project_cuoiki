@@ -16,8 +16,6 @@ return new class extends Migration
             $table->foreignUuid('chapter_id')->references('id')->on('chapters')->onDelete('cascade');
             $table->foreignUuid('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->text('content');
-            $table->unsignedInteger('upvote_count')->default(0);
-            $table->unsignedInteger('downvote_count')->default(0);
             $table->uuid('parent_comment')->nullable(true);
             $table->timestamps();
         });

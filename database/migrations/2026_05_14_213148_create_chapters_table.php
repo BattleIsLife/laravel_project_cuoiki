@@ -16,11 +16,9 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('chapter_name', 100)->nullable(false);
             $table->smallInteger('chapter_order')->default(0);
-            $table->foreignUuid('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreignUuid('fiction_id')->references('id')->on('fictions')->onDelete('cascade');
             $table->mediumText('content')->nullable(true);
             $table->smallInteger('is_posted')->default(0);
-            $table->unsignedInteger('like_count')->default(0);
             $table->unsignedInteger('watch_count')->default(0);
             $table->timestamps();
         });
