@@ -7,21 +7,20 @@
     <p>Ươm mầm sự sáng tạo</p>
 </div>
 <div class="container-fluid mt-5">
-    <div class="row">
-        <div class="col-sm-3 text-center">
-            <h2>Leader</h2>
-            <div>
-                <img src="{{ @asset('logo/anh ca nhan.jpg') }}" alt="Logo" class="rounded-pill" style="width: 100px;">
-            </div>
-            <p>Trần Tuấn Đạt</p>
-            <a href="">Thông tin thêm</a>
-            <hr class="d-sm-none">
-        </div>
-
-        <div class="col-sm-9 pe-5">
-            <h3 class="text-center">Các chương truyện mới nhất!!</h3>
-        </div>
+    <div class="container">
+        <h3 class="text-center">Thông báo của moderator</h3>
+        {{-- Danh sách thông báo ở đây --}}
     </div>
+    <div class="container mt-5">
+        <h3 class="text-center">Các tiểu thuyết hot nhất!!</h3>
+        {{-- Danh sách truyện wor đấy --}}
+    </div>
+
+    <div class="container mt-5">
+        <h3 class="text-center">Các series hot nhất!!</h3>
+        {{-- Danh sách truyện ở đây --}}
+    </div>
+        
 </div>
 
 

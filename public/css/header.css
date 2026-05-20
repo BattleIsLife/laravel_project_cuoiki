@@ -1,0 +1,6 @@
+@media screen and (width < 895px) {
+    #header_search_bar
+    {
+        display: none;
+    }   
+}
