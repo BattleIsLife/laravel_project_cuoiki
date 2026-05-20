@@ -15,8 +15,9 @@
             </ul>
 
             <ul class="navbar-nav ms-auto" id="nav-auth">
-                <li class="nav-item">
+                <li class="nav-item d-flex flex-row">
                     <a class="nav-link" href="">Đăng nhập</a>
+                    <a class="nav-link" href="">Đăng ký</a>
                 </li>
             </ul>
         </div>
