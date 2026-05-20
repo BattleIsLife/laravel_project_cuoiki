@@ -42,6 +42,11 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+
+        'moderator' => [
+            'driver' => 'session',
+            'provider' => 'moderators'
+        ]
     ],
 
     /*
@@ -62,15 +67,21 @@ return [
     */
 
     'providers' => [
+        // 'users' => [
+        //     'driver' => 'eloquent',
+        //     'model' => env('AUTH_MODEL', User::class),
+        // ],
+
         'users' => [
-            'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', User::class),
+            'driver' => 'database',
+            'model' => App\Models\User::class
         ],
 
-        // 'users' => [
+        // Để sau
+        // 'model' => [
         //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        //     'model' => App\Models\Moderator::class
+        // ]
     ],
 
     /*
