@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('series', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('series_name', 100)->nullable(false);
+            $table->string('series_name', 100)->unique()->nullable(false);
             $table->foreignUuid('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->text('description')->nullable(true);
             $table->timestamps();

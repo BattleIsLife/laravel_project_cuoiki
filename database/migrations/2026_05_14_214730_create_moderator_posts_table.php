@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('moderator_posts', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('title', 100)->nullable(false);
+            $table->string('title', 100)->unique()->nullable(false);
             $table->foreignUuid('moderator_id')->nullable(true)->references('id')->on('moderators')->onDelete('set null');
             $table->text('description')->nullable(false);
             $table->timestamps();

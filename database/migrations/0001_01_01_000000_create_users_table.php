@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('username', 100)->unique();
             $table->string('email', 100)->unique();
             $table->string('password', 255)->nullable(false);
-            $table->unsignedTinyInteger('is_blocked')->default(0);
             $table->timestamp('blocked_until')->nullable(true);
             $table->rememberToken();
             $table->timestamps();
