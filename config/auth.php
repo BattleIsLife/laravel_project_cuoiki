@@ -74,12 +74,14 @@ return [
 
         'users' => [
             'driver' => 'database',
+            'table' => 'users',
             'model' => App\Models\User::class
         ],
 
         // Để sau
         // 'model' => [
         //     'driver' => 'database',
+        //     'table' => 'moderators',
         //     'model' => App\Models\Moderator::class
         // ]
     ],
