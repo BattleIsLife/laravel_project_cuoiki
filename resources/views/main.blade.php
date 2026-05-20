@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flan-fiction | Ươm mầm sự sáng tạo</title>
+    <title>@yield('title', "Flan-fiction | Ươm mầm sự sáng tạo")</title>
 
     <link rel="icon" type="image" href="{{ @asset('logo/favicon.jpeg') }}">
     <!-- Bootstrap CSS -->

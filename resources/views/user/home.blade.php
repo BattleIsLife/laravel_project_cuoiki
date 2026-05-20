@@ -8,6 +8,10 @@
 </div>
 <div class="container-fluid mt-5">
     <div class="container">
+        <h3 class="text-center">Thông báo của moderator</h3>
+        {{-- Danh sách thông báo ở đây --}}
+    </div>
+    <div class="container mt-5">
         <h3 class="text-center">Các tiểu thuyết hot nhất!!</h3>
         {{-- Danh sách truyện wor đấy --}}
     </div>
