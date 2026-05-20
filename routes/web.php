@@ -7,6 +7,4 @@ Route::get('/', [HomeController::class, 'index']);
 
 Route::get('/home', [HomeController::class, 'index']);
 
-Route::get('/test', function(){
-    return view('test');
-});
+Route::get('/test', [HomeController::class, 'test']);
