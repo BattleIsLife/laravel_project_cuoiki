@@ -79,11 +79,11 @@ return [
         ],
 
         // Để sau
-        // 'model' => [
-        //     'driver' => 'database',
-        //     'table' => 'moderators',
-        //     'model' => App\Models\Moderator::class
-        // ]
+        'moderators' => [
+            'driver' => 'database',
+            'table' => 'moderators',
+            // 'model' => App\Models\User::class
+        ]
     ],
 
     /*
