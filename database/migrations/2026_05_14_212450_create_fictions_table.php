@@ -15,6 +15,7 @@ return new class extends Migration
         Schema::create('fictions', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('fiction_name', 100)->unique()->nullable(false);
+            $table->string('image_link', 255)->nullable(true);
             $table->foreignUuid('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreignUuid('series_id')->nullable(true)->references('id')->on('series')->onDelete('set null');
             $table->text('description')->nullable(true);
