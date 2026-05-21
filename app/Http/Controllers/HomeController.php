@@ -17,6 +17,6 @@ class HomeController extends Controller
     {
         // $user = User::all()->first();
         // return view('test', ['user' => $user]);
-        return view ('about.about_me');
+        return view ('series.new_series');
     }
 }
