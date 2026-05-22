@@ -13,10 +13,10 @@ class HomeController extends Controller
         return view('user.home');
     }
 
-    public function test()
-    {
-        // $user = User::all()->first();
-        // return view('test', ['user' => $user]);
-        return view ('about.about_me');
-    }
+    // public function test()
+    // {
+    //     // $user = User::all()->first();
+    //     // return view('test', ['user' => $user]);
+    //     return view ('user.profile.list_series');
+    // }
 }

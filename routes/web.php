@@ -7,4 +7,4 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-Route::get('/test', [HomeController::class, 'test'])->name('test');
+// Route::get('/test', [HomeController::class, 'test'])->name('test');

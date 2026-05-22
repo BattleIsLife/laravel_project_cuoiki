@@ -35,7 +35,7 @@
     @include('shared.header')
     
     {{-- Nội dung ở đây --}}
-    <main>
+    <main class="flex-grow-1">
         <div>
             @yield('content')
         </div>

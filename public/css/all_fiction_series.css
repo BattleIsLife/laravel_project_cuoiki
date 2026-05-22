@@ -1,0 +1,51 @@
+#fiction_series_list
+{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.fiction_series
+{
+    display: flex;
+    flex-direction: column;
+    width: 250px;
+    min-height: 320px;
+}
+
+.fiction_series *
+{
+    margin-top: 10px;
+    align-self: center;
+}
+
+.fiction_series h5
+{
+    height: 50px;
+    overflow-y: scroll;
+}
+
+a.fiction_series_link
+{
+    text-decoration: none;
+    color: black;
+}
+
+a:hover.fiction_series_link
+{
+    text-decoration: underline;
+    /* color: black; */
+}
+
+
+.fiction_series_img
+{
+    width: 108px;
+    height: 170px;
+}
+
+#header_search_bar
+{
+    display: none;
+}   

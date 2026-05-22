@@ -25,16 +25,21 @@
 
             <ul class="navbar-nav ms-auto" id="nav-auth">
                 <li class="navbar-nav">
+                    {{-- Sau khi đăng nhập user --}}
                     @auth('web')
                         <a class="nav-link" href="">Bắt đầu viết truyện</a>
                         <a class="nav-link" href="">Username here</a>
+                        <a class="nav-link" href="">Đăng xuất</a>
                     @endauth
 
+                    {{-- Sau khi đăng nhập moderator --}}
                     @auth('moderator')
                         <a class="nav-link" href="">Dashboard</a>
                         <a class="nav-link" href="">Username here</a>
+                        <a class="nav-link" href="">Đăng xuất</a>
                     @endauth
 
+                    {{-- Chưa đăng nhập/ Đã đăng xuất --}}
                     @guest()
                         <a class="nav-link" href="">Đăng nhập</a>
                         <a class="nav-link" href="">Đăng ký</a>
