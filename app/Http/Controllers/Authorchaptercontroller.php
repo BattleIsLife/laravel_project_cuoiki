@@ -7,6 +7,7 @@ use App\Models\Chapter;
 use App\Models\Fiction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class AuthorChapterController extends Controller
 {
@@ -17,7 +18,6 @@ class AuthorChapterController extends Controller
     // =========================================================
     public function index($fictionId)
     {
-        // Chỉ lấy truyện của tác giả đang đăng nhập
         $fiction = Fiction::where('id', $fictionId)
             ->where('user_id', Auth::id())
             ->firstOrFail();
@@ -57,13 +57,17 @@ class AuthorChapterController extends Controller
             ->firstOrFail();
 
         $request->validate([
-            'chapter_name'  => 'required|string|max:100|unique:chapters,chapter_name',
+            'chapter_name' => [
+                'required', 'string', 'max:100',
+                // FIX: unique chỉ trong cùng 1 truyện, không phải toàn bảng
+                Rule::unique('chapters', 'chapter_name')->where('fiction_id', $fictionId),
+            ],
             'chapter_order' => 'required|integer|min:1',
             'content'       => 'nullable|string',
             'action'        => 'required|in:draft,publish',
         ], [
             'chapter_name.required' => 'Vui lòng nhập tên chương.',
-            'chapter_name.unique'   => 'Tên chương này đã tồn tại.',
+            'chapter_name.unique'   => 'Tên chương này đã tồn tại trong truyện.',
             'chapter_name.max'      => 'Tên chương không được quá 100 ký tự.',
             'chapter_order.required'=> 'Vui lòng nhập số thứ tự chương.',
             'chapter_order.min'     => 'Số thứ tự phải lớn hơn 0.',
@@ -120,13 +124,19 @@ class AuthorChapterController extends Controller
             ->firstOrFail();
 
         $request->validate([
-            'chapter_name'  => 'required|string|max:100|unique:chapters,chapter_name,' . $chapterId,
+            'chapter_name' => [
+                'required', 'string', 'max:100',
+                // FIX: unique trong cùng truyện, bỏ qua chính nó khi update
+                Rule::unique('chapters', 'chapter_name')
+                    ->where('fiction_id', $fictionId)
+                    ->ignore($chapterId),
+            ],
             'chapter_order' => 'required|integer|min:1',
             'content'       => 'nullable|string',
             'action'        => 'required|in:draft,publish',
         ], [
             'chapter_name.required' => 'Vui lòng nhập tên chương.',
-            'chapter_name.unique'   => 'Tên chương này đã tồn tại.',
+            'chapter_name.unique'   => 'Tên chương này đã tồn tại trong truyện.',
             'chapter_name.max'      => 'Tên chương không được quá 100 ký tự.',
             'chapter_order.required'=> 'Vui lòng nhập số thứ tự chương.',
             'chapter_order.min'     => 'Số thứ tự phải lớn hơn 0.',
@@ -184,12 +194,14 @@ class AuthorChapterController extends Controller
             ->where('fiction_id', $fictionId)
             ->firstOrFail();
 
-        $chapter->update(['is_posted' => $chapter->is_posted ? 0 : 1]);
+        // FIX: lấy giá trị mới sau khi update để trả label đúng
+        $newStatus = $chapter->is_posted ? 0 : 1;
+        $chapter->update(['is_posted' => $newStatus]);
 
         return response()->json([
             'success'   => true,
-            'is_posted' => $chapter->is_posted,
-            'label'     => $chapter->is_posted ? 'Đã đăng' : 'Bản nháp',
+            'is_posted' => $newStatus,
+            'label'     => $newStatus ? 'Đã đăng' : 'Bản nháp',
         ]);
     }
 }
