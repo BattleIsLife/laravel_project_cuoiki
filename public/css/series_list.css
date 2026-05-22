@@ -1,0 +1,32 @@
+/* Flexbox chứa series */
+
+/* Thông tin series */
+ .series
+{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.series-info
+{
+    display: flex;
+    flex-direction: column;
+}
+
+img.cover_image
+{
+    width: 108px;
+    height: 170px;
+}
+
+@media (max-width: 866px) {
+    .series{
+        justify-content: center;
+    }
+
+    .series-title
+    {
+        text-align: center;
+    }
+}
