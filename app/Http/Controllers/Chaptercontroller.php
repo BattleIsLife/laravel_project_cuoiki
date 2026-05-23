@@ -105,6 +105,15 @@ class ChapterController extends Controller
             return response()->json(['success' => false, 'message' => 'Vui lòng đăng nhập.'], 401);
         }
 
+        // FIX: kiểm tra user bị block không cho like
+        $user = Auth::user();
+        if ($user->blocked_until && now()->lessThan($user->blocked_until)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Tài khoản của bạn bị chặn đến ' . $user->blocked_until->format('d/m/Y H:i') . '.',
+            ], 403);
+        }
+
         Chapter::where('id', $chapterId)->where('is_posted', 1)->firstOrFail();
 
         $existing = DB::table('like_chapter_history')
@@ -188,12 +197,22 @@ class ChapterController extends Controller
     // =========================================================
     // [AJAX] Upvote bình luận chương (cần đăng nhập)
     // Route: POST /chapter-comments/{commentId}/vote
-    // Body : { "vote": 1 }   (1 = upvote, chỉ hỗ trợ upvote do DB dùng unsignedTinyInteger)
+    // Lưu ý: DB dùng unsignedTinyInteger nên chỉ hỗ trợ upvote (count = 1)
+    //        Nếu muốn downvote thật sự → báo Tuấn Đạt đổi migration thành tinyInteger
     // =========================================================
     public function voteComment(Request $request, $commentId)
     {
         if (!Auth::check()) {
             return response()->json(['success' => false, 'message' => 'Vui lòng đăng nhập.'], 401);
+        }
+
+        // FIX: kiểm tra user bị block không cho vote
+        $user = Auth::user();
+        if ($user->blocked_until && now()->lessThan($user->blocked_until)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Tài khoản của bạn bị chặn đến ' . $user->blocked_until->format('d/m/Y H:i') . '.',
+            ], 403);
         }
 
         ChapterComment::findOrFail($commentId);
@@ -244,8 +263,14 @@ class ChapterController extends Controller
 
         $comment = ChapterComment::findOrFail($commentId);
 
-        if (Auth::id() !== $comment->user_id) {
-            return response()->json(['success' => false, 'message' => 'Bạn không có quyền xóa bình luận này.'], 403);
+        // FIX: cho phép moderator (guard khác) xóa comment của user
+        $isModerator = Auth::guard('moderator')->check();
+
+        if (!$isModerator && Auth::id() !== $comment->user_id) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Bạn không có quyền xóa bình luận này.',
+            ], 403);
         }
 
         $comment->delete();
