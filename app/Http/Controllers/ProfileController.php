@@ -16,10 +16,12 @@ class ProfileController extends Controller
 
     public function fiction_list()
     {
-        $fictions = Fiction::whereUserId(Auth::guard('web')->user()->id)->orderByDesc('created_at')->get();
+        $fictions = Fiction::whereUserId(Auth::guard('web')->user()->id)->withCount('like_fiction_history')
+                            ->orderByDesc('created_at')
+                            ->paginate(10);
 
         $data = [
-            'fictions' => $fictions
+            'fictions' => $fictions,
         ];
 
         return view('user.profile.list_fictions', $data);
