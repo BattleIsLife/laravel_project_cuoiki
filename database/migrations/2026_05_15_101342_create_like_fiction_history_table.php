@@ -12,9 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('like_fiction_history', function (Blueprint $table) {
+            $table->id(); // Keep a simple primary key
             $table->foreignUuid('fiction_id')->references('id')->on('fictions');
             $table->foreignUuid('user_id')->references('id')->on('users');
-            $table->primary(['fiction_id', 'user_id']);
+            $table->unique(['fiction_id', 'user_id']);
             $table->timestamps();
         });
     }

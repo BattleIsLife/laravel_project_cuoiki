@@ -12,9 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('upvote_moderator_post_comment_history', function (Blueprint $table) {
+            $table->id(); // Keep a simple primary key
             $table->foreignUuid('comment_id')->references('id')->on('moderator_post_comments');
             $table->foreignUuid('user_id')->references('id')->on('users');
-            $table->primary(['comment_id', 'user_id']);
+            $table->unique(['comment_id', 'user_id']);
             $table->tinyInteger('count')->default(1); // 1 là upvote còn -1 là downvote, dùng để tính điểm tổng
             $table->timestamps();
         });
