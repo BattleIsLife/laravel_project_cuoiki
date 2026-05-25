@@ -15,9 +15,8 @@
                 <li class="nav-item" id="header_search_bar">
                     {{-- Tí nữa thay link mới sau --}}
                     <form class="d-flex" role="search" 
-                          method="get" action="https://youtu.be/dQw4w9WgXcQ?si=VkmG2L8omiNp_FW-">
-                        @csrf
-                        <input class="form-control me-2" type="search" placeholder="Tìm kiếm tên truyện" aria-label="Search">
+                          method="get" action="{{ route('all_fictions') }}">
+                        <input class="form-control me-2" type="search" name="q" placeholder="Tìm kiếm tên truyện" aria-label="Search">
                         <button class="btn btn-outline-success" type="submit">Search</button>
                     </form>
                 </li>
@@ -27,7 +26,7 @@
                 <li class="navbar-nav">
                     {{-- Sau khi đăng nhập user --}}
                     @auth('web')
-                        <a class="nav-link" href="{{-- route('user.new_fiction') --}}">Bắt đầu viết truyện</a>
+                        <a class="nav-link" href="{{ route('user.new_fiction') }}">Bắt đầu viết truyện</a>
                         <a class="nav-link fw-bold" href="{{ route('user.profile') }}">{{ auth()->guard('web')->user()->username }}</a>
                         <a href="{{ url('/author/logout') }}" class="nav-link fw-bold text-danger" 
                             onclick="event.preventDefault(); document.getElementById('user-logout-form').submit();">

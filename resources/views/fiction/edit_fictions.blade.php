@@ -29,7 +29,7 @@
         </li>
     </ul>
 
-    <div class="tab-content id="fictionEditTabsContent">
+    <div class="tab-content" id="fictionEditTabsContent">
         
         <div class="tab-pane fade" 
              id="edit_fiction_info" 
@@ -47,5 +47,10 @@
         
     </div>
 </div>
+<script>
+    const BASE_URL = "{{ url('/') }}";
+    const CSRF_TOKEN = "{{ csrf_token() }}";
+</script>
 <script src="{{ @asset('js/edit_fiction.js') }}"></script>
+<script src="{{ @asset('js/delete_fiction.js') }}"></script>
 @endsection

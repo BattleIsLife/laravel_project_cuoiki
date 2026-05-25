@@ -15,7 +15,8 @@ class Fiction extends Model
         'fiction_name',
         'user_id',
         'series_id',
-        'description'
+        'description',
+        'image_link',
     ];
 
     public function author()
