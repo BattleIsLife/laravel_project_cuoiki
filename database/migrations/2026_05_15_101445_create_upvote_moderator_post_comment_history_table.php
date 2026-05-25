@@ -15,7 +15,7 @@ return new class extends Migration
             $table->foreignUuid('comment_id')->references('id')->on('moderator_post_comments');
             $table->foreignUuid('user_id')->references('id')->on('users');
             $table->primary(['comment_id', 'user_id']);
-            $table->unsignedTinyInteger('count')->default(1); // 1 là upvote còn -1 là downvote, dùng để tính điểm tổng
+            $table->tinyInteger('count')->default(1); // 1 là upvote còn -1 là downvote, dùng để tính điểm tổng
             $table->timestamps();
         });
     }
