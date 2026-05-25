@@ -2,6 +2,12 @@
 
 @section('content')
 <link rel="stylesheet" href="{{ @asset('css/all_fiction_series.css') }}">
+<style>
+    #header_search_bar
+    {
+        display: none;
+    }   
+</style>
 <div class="container-sm mt-3">
     {{-- Tí nữa thay link mới sau --}}
     <form class="d-flex" role="search" 
