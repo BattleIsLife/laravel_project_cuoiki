@@ -21,4 +21,15 @@ class Series extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    public function fictions()
+    {
+        return $this->hasMany(Fiction::class, 'series_id');
+    }
+
+    public function chapters()
+    {
+        // Tham số: (Model_Đích, Model_Trung_Gian, Khóa_Ngoại_Trung_Gian, Khóa_Ngoại_Đích)
+        return $this->hasManyThrough(Chapter::class, Fiction::class, 'series_id', 'fiction_id');
+    }
 }
