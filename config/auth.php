@@ -75,14 +75,12 @@ return [
         'users' => [
             'driver' => 'database',
             'table' => 'users',
-            'model' => App\Models\User::class
         ],
 
         // Để sau
         'moderators' => [
             'driver' => 'database',
             'table' => 'moderators',
-            // 'model' => App\Models\User::class
         ]
     ],
 
