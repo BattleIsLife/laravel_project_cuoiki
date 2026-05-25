@@ -18,7 +18,7 @@ class AuthenticateUser
     {
         // Nếu user CHƯA đăng nhập thông qua guard 'web'
         if(!Auth::guard('web')->check())
-            return redirect()->route('home')->with('error', 'Vui lòng đăng nhập để truy cập');
+            return redirect()->route('user.login')->with('error', 'Vui lòng đăng nhập để truy cập');
         return $next($request);
     }
 }
