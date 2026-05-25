@@ -27,4 +27,9 @@ class Fiction extends Model
     {
         return $this->belongsTo(Series::class, 'series_id');
     }
+
+    public function chapters()
+    {
+        return $this->hasMany(Chapter::class, 'fiction_id');
+    }
 }
