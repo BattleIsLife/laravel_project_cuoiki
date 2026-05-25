@@ -3,7 +3,7 @@
 @section('content')
 <div class="container p-4 mt-5">
 <div class="container-sm card p-4">
-    <form action="" method="post" id="registerForm">
+    <form action="{{ url('/register') }}" method="post" id="registerForm">
         @csrf
 
         <h1 class="text-center">Đăng ký</h1>
