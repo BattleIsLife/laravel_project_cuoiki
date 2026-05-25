@@ -21,4 +21,9 @@ class Series extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    public function fictions()
+    {
+        return $this->hasMany(Fiction::class, 'series_id');
+    }
 }
