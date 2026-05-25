@@ -32,4 +32,9 @@ class Fiction extends Model
     {
         return $this->hasMany(Chapter::class, 'fiction_id');
     }
+
+    public function like_fiction_history()
+    {
+        return $this->hasMany(LikeFictionHistory::class, 'fiction_id');
+    }
 }
