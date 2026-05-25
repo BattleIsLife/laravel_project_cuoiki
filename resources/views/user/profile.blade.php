@@ -6,14 +6,14 @@
             <ul class="nav nav-pills flex-column">
                 <!-- Tab chuyển đổi -->
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('user.profile') }}">Thông tin tài khoản</a>
+                    <a class="nav-link" href="">Thông tin tài khoản</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('user.fiction_list') }}">Danh sách truyện</a>
+                    <a class="nav-link" href="">Danh sách truyện</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('user.series_list') }}">Danh sách series</a>
+                    <a class="nav-link" href="">Danh sách series</a>
                 </li>
 
                 <li class="nav-item mt-3">

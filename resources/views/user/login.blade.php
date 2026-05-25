@@ -3,7 +3,7 @@
 @section('content')
 <div class="container p-4 mt-5">
 <div class="container-sm card p-4">
-    <form action="{{ url('/login') }}" method="post" id="loginForm">
+    <form action="" method="post" id="loginForm">
         @csrf
 
         <h1 class="text-center">Đăng nhập</h1>
@@ -38,7 +38,7 @@
 
         <div class="mt-3 text-center">
             Chưa có tài khoản? 
-            <a href="{{ route('user.register') }}">Đăng ký ngay</a>
+            <a href="">Đăng ký ngay</a>
         </div>
     </form>
 </div>

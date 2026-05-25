@@ -16,11 +16,11 @@
 </div>
 <div class="row">
     <div class="col-sm-6">
-        <p>Tên tài khoản: <i>{{ auth()->guard('web')->user()->username }}</i></p>
+        <p>Tên tài khoản: <i><span id="username"></span></i></p>
     </div>
 
     <div class="col-sm-6">
-        <p>Email: <i>{{ auth()->guard('web')->user()->email }}</i></p>
+        <p>Email: <i><span id="email"></span></i></p>
     </div>
     <p><a href=">">Đổi mật khẩu</a></p>
 </div>
