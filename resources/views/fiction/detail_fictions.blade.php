@@ -48,8 +48,9 @@
             <div class="d-flex flex-column">
                 @forelse ($chapters as $chapter)
                     <div class="card p-3 mt-3">
-                        <h5 class="mb-1">Chương {{ $chapter->chapter_order }}: {{ $chapter->chapter_name }}</h5>
+                        <a href="{{ url('/chapter/' . $chapter->id) }}"><h5 class="mb-1">{{ $chapter->chapter_name }}</h5></a>
                         <p class="mb-0">Lượt xem: {{ $chapter->watch_count }}</p>
+                        <p class="mb-0">Lượt thích: {{ $chapter->like_chapter_history_count }}</p>
                     </div>
                 @empty
                     <div class="alert alert-info mt-3 text-center">Truyện này chưa có chương nào.</div>

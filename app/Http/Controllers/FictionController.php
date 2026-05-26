@@ -36,7 +36,7 @@ class FictionController extends Controller
             ->withCount('like_fiction_history')
             ->findOrFail($fictionId);
 
-        $chapters = Chapter::where('fiction_id', $fictionId)
+        $chapters = Chapter::withCount('like_chapter_history')->where('fiction_id', $fictionId)
             ->where('is_posted', 1)
             ->orderBy('chapter_order')
             ->get();
