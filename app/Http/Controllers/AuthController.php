@@ -79,6 +79,12 @@ class AuthController extends Controller
                         ->withInput();
         }
 
+        $blocked_user = User::whereUsername($credentials['username'])->first();
+        if($blocked_user->blocked_until && $blocked_user->blocked_until->isFuture())
+            return back()->with('error', 'Tài khoản này bị chặn cho tới ' . $blocked_user->blocked_until)
+                        ->withInput();
+
+
         // 2. Chỉ dùng 1 lệnh IF duy nhất để kiểm tra so khớp tài khoản trong DB
         // Sử dụng guard 'web' đã cấu hình cho User thường
         if (Auth::guard('web')->attempt($credentials, $request->boolean('remember'))) {
