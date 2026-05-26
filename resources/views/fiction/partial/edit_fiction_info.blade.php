@@ -68,41 +68,6 @@
 
                     <button type="submit" class="btn btn-success w-100" name="add_fiction">Sửa thông tin truyện</button>
                 </form>
-
-                <div class="container-sm d-flex justify-content-end mt-3 mb-3">
-                    <a class="btn btn-danger delete-btn" style="width: fit-content; height: fit-content;"
-                        data-bs-toggle="modal"
-                        data-bs-target="#deleteModal"
-                        data-id="{{ $fiction->id }}"
-                        data-name="{{ $fiction->fiction_name }}"
-                        onclick="get_delete_id(this)">Xóa truyện</a>
-                </div>
-            </div>
-        </div>
-
-         <!-- The Modal -->
-        <div class="modal" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-
-                <!-- Modal Header -->
-                <div class="modal-header">
-                    <h4 class="modal-title">Xác nhận muốn xóa <strong id="delete_stuff">?</strong></h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-
-                <!-- Modal body -->
-                <div class="modal-body">
-                    Hành động này sẽ không thể đảo ngược...hãy suy nghĩ thật kỹ
-                </div>
-
-                <!-- Modal footer -->
-                <div class="modal-footer">
-                    <button type="button" id="confirm_delete_btn" onclick="confirm_delete(this)" class="btn btn-danger" data-redirect="{{ route('user.fiction_list') }}">Xác nhận xóa</button>
-                    <button type="button" class="btn btn-success" id="btn-close-modal" data-bs-dismiss="modal">Close</button>
-                </div>
-
-                </div>
             </div>
         </div>
     </div>
