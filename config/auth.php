@@ -73,14 +73,15 @@ return [
         // ],
 
         'users' => [
-            'driver' => 'database',
-            'table' => 'users',
+            'driver' => 'eloquent',
+            'model' => App\Models\User::class
+            // 'table' => 'users',
         ],
 
         // Để sau
         'moderators' => [
-            'driver' => 'database',
-            'table' => 'moderators',
+            'driver' => 'eloquent',
+            'model' => App\Models\Moderator::class
         ]
     ],
 
