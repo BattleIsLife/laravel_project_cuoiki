@@ -17,7 +17,7 @@
                 </li>
 
                 <li class="nav-item mt-3">
-                    <a class="nav-link bg-secondary text-white" href="">Xóa tài khoản</a>
+                    <a class="nav-link bg-secondary text-white" href="{{ route('user.delete_account') }}">Xóa tài khoản</a>
                 </li>
             </ul>
             <hr class="d-sm-none">
