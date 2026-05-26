@@ -1,19 +1,19 @@
 let logged_in = false;
 
 // Kiểm tra đăng nhập
-document.addEventListener('DOMContentLoaded', function () {
-    fetch("")
-        .then(response => response.json())
-        .then(data => {
-            if(data.logged_in)
-            {
-               logged_in = true;
-            }
-        })
-        .catch(error => {
-            console.error('Lỗi kiểm tra đăng nhập:', error);
-        });
-});
+// document.addEventListener('DOMContentLoaded', function () {
+//     fetch("")
+//         .then(response => response.json())
+//         .then(data => {
+//             if(data.logged_in)
+//             {
+//                logged_in = true;
+//             }
+//         })
+//         .catch(error => {
+//             console.error('Lỗi kiểm tra đăng nhập:', error);
+//         });
+// });
 
 document.getElementById('commentForm').addEventListener('submit', function(e) {
     e.preventDefault(); // Ngăn reload trang
