@@ -5,27 +5,30 @@
 <link href="{{ @asset('css/editor.css') }}" rel="stylesheet" />
 <div class="mt-3 p-2">
     <div class="container-sm">
-        <form id="editChapterForm" action="" method="post">
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul class="mb-0" style="padding-left: 20px;">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+        <form id="editChapterForm" action="{{ @url('/author/edit_fiction/' . $fiction->id . '/edit_chapter/' . $chapter->id) }}" method="post">
             @csrf
-            <input type="hidden" readonly name="fiction_id" value="">
-            <input type="hidden" readonly name="id" value="">
-            <input class="form-control text-center fs-4 fst-italic" id="title" name="title" value="" placeholder="Tiêu đề chương ở đây!!" type="text">
-            <p class="mt-3">Số thứ tự chương <input type="number" class="text-center" name="chapter_order" value="" min="0"></p>
+            @method('PUT')
+            <input class="form-control text-center fs-4 fst-italic" id="title" name="chapter_name" value="{{ $chapter->chapter_name }}" placeholder="Tiêu đề chương ở đây!!" type="text">
+            <p class="mt-3">Số thứ tự chương <input type="number" class="text-center" name="chapter_order" value="{{ $chapter->chapter_order }}" min="1"></p>
             <div class="invalid-feedback" id="titleError"></div>
-            <textarea readonly hidden name="content" id="hiddenContent">
-                
-            </textarea>
+            <textarea readonly hidden name="content" id="hiddenContent">{!! $chapter->content !!}</textarea>
+            <label for="save_as_draft">Lưu dưới dạng draft <input type="checkbox" name="save_as_draft" @if($chapter->is_posted == 0) checked @endif></label>
             <div class="container-sm d-flex justify-content-end mb-3">
                 <button type="submit" class="btn btn-success mt-3">Lưu chương</button>
             </div>
         </form>
 
-        <div class="container-sm d-flex justify-content-end mb-3">
-            <a class="btn btn-danger delete-btn" style="width: fit-content; height: fit-content;" data-bs-toggle="modal" data-bs-target="#deleteModal">Xóa chương</a>
-        </div>
-
         <div id="editor" class="ql-editor">
-            
+            {!! $chapter->content !!}
         </div>
     </div>
     
