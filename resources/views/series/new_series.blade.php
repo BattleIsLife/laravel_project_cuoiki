@@ -10,13 +10,23 @@
 
         <div class="col-sm-9">
             <div class="container-sm card p-4 mt-2">
-                <form action="" method="post" id="seriesForm"  enctype="multipart/form-data">
+                <form action="{{ url('/author/new_series') }}" method="post" id="seriesForm"  enctype="multipart/form-data">
                     @csrf
 
                     <h1 class="text-center">Thêm series mới</h1>
                     @if (session()->has('error'))
                         <div class="alert alert-danger">
                             {{ session()->get('error') }}
+                        </div>
+                    @endif
+
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul class="mb-0" style="padding-left: 20px;">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
                         </div>
                     @endif
 
