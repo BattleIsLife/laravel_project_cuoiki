@@ -12,7 +12,7 @@ class FictionController extends Controller
     {
         $keyword = trim((string) $request->query('q', ''));
 
-        $fictions = Fiction::with(['author', 'series'])//->whereHas('chapters')
+        $fictions = Fiction::with(['author', 'series'])->whereHas('chapters')
             ->withCount('like_fiction_history')
             ->when($keyword !== '', function ($query) use ($keyword) {
                 $query->where(function ($inner) use ($keyword) {
