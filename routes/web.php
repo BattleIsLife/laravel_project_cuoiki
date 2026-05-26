@@ -6,6 +6,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Author\AuthorSeriesController;
 use App\Http\Controllers\FictionController;
 use App\Http\Controllers\Author\AuthorFictionController;
+use App\Http\Controllers\Author\AuthorChapterController;
 use Illuminate\Support\Facades\Route;
 
 Route::controller(HomeController::class)->group(function(){
@@ -47,6 +48,17 @@ Route::prefix('author')->middleware('check.user.login')->group(function(){
     Route::get('/edit_fiction/{fictionId}', [AuthorFictionController::class, 'edit'])->name('user.edit_fiction');
     Route::post('/edit_fiction/{fictionId}', [AuthorFictionController::class, 'update']);
     Route::delete('/delete_fiction/{fictionId}', [AuthorFictionController::class, 'delete'])->name('user.delete_fiction');
+
+
+    // Chương truyện
+    // Thêm chương mới
+    Route::get('/edit_fiction/{fictionId}/new_chapter', [AuthorChapterController::class, 'create']);
+    Route::post('/edit_fiction/{fictionId}/new_chapter', [AuthorChapterController::class, 'store']);
+    // Sửa chương
+    Route::get('/edit_fiction/{fictionId}/edit_chapter/{chapterId}', [AuthorChapterController::class, 'edit']);
+    Route::put('/edit_fiction/{fictionId}/edit_chapter/{chapterId}', [AuthorChapterController::class, 'update']);
+    // Xóa chương
+    Route::delete('/edit_fiction/{fictionId}/delete_chapter/{chapterId}', [AuthorChapterController::class, 'destroy']);
 
 
     // Series
