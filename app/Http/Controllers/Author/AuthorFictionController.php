@@ -15,7 +15,7 @@ class AuthorFictionController extends Controller
 {
     public function index()
     {
-        $fictions = Fiction::where('user_id', Auth::id())
+        $fictions = Fiction::where('user_id', Auth::guard('web')->user()->id)
             ->with('series')
             ->withCount('like_fiction_history')
             ->latest()
@@ -26,7 +26,7 @@ class AuthorFictionController extends Controller
 
     public function create()
     {
-        $series = Series::where('user_id', Auth::id())
+        $series = Series::where('user_id', Auth::guard('web')->user()->id)
             ->orderBy('series_name')
             ->get();
 
@@ -36,7 +36,7 @@ class AuthorFictionController extends Controller
     public function store(Request $request)
     {
         $validated = $this->validateFiction($request);
-        $validated['user_id'] = Auth::id();
+        $validated['user_id'] = Auth::guard('web')->user()->id;
 
         if ($request->hasFile('image')) {
             $validated['image_link'] = $request->file('image')->store('fiction_covers', 'public');
@@ -50,10 +50,10 @@ class AuthorFictionController extends Controller
     public function edit($fictionId)
     {
         $fiction = Fiction::where('id', $fictionId)
-            ->where('user_id', Auth::id())
+            ->where('user_id', Auth::guard('web')->user()->id)
             ->firstOrFail();
 
-        $series = Series::where('user_id', Auth::id())
+        $series = Series::where('user_id', Auth::guard('web')->user()->id)
             ->orderBy('series_name')
             ->get();
 
@@ -67,13 +67,13 @@ class AuthorFictionController extends Controller
     public function update(Request $request, $fictionId)
     {
         $fiction = Fiction::where('id', $fictionId)
-            ->where('user_id', Auth::id())
+            ->where('user_id', Auth::guard('web')->user()->id)
             ->firstOrFail();
 
         $validated = $this->validateFiction($request);
 
         if ($request->hasFile('image')) {
-            if ($fiction->image_link) {
+            if ($fiction->image_link !== "default.jpeg") {
                 Storage::disk('public')->delete($fiction->image_link);
             }
 
@@ -82,16 +82,16 @@ class AuthorFictionController extends Controller
 
         $fiction->update($validated);
 
-        return redirect()->route('user.edit_fiction', $fiction->id)->with('success', 'Đã cập nhật thông tin truyện.');
+        return redirect()->route('user.fiction_list', $fiction->id)->with('success', 'Đã cập nhật thông tin truyện.');
     }
 
     public function delete($fictionId)
     {
         $fiction = Fiction::where('id', $fictionId)
-            ->where('user_id', Auth::id())
+            ->where('user_id', Auth::guard('web')->user()->id)
             ->firstOrFail();
 
-        if ($fiction->image_link) {
+        if ($fiction->image_link !== "default.jpeg") {
             Storage::disk('public')->delete($fiction->image_link);
         }
 
@@ -110,7 +110,7 @@ class AuthorFictionController extends Controller
             'description' => ['nullable', 'string'],
             'series_id' => [
                 'nullable',
-                Rule::exists('series', 'id')->where('user_id', Auth::id()),
+                Rule::exists('series', 'id')->where('user_id', Auth::guard('web')->user()->id),
             ],
             'image' => ['nullable', 'image', 'max:2048'],
         ], [
