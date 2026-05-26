@@ -1,14 +1,28 @@
 @extends('main')
 @section('content')
+@php
+    $user = auth()->guard('web')->user();
+@endphp
 <div class="container p-4 mt-5">
 <div class="container-sm card p-4">
-    <form action="" method="post" id="deleteForm">
+    <form action="{{ @url('/author/delete_account') }}" method="post" id="deleteForm">
         @csrf
+        @method('delete')
 
         <div class="text-center">
             <h1>Xóa tài khoản</h1>
-            <h4>{{ session()->get('username') }}, bạn đang thực hiện xóa tài khoản. Hãy nghĩ thật kỹ trước khi tiếp tục.</h4>
+            <h4>{{ $user->username }}, bạn đang thực hiện xóa tài khoản. Hãy nghĩ thật kỹ trước khi tiếp tục.</h4>
         </div>
+
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul class="mb-0" style="padding-left: 20px;">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
         @if (session()->has('error'))
             <div class="alert alert-danger">
@@ -18,10 +32,8 @@
 
         <div class="mb-3 mt-3">
             <label for="username" class="form-label">Tên người dùng:</label>
-            <input type="hidden" class="form-control" readonly
-                    id="username" name="username" value="{{ session()->get('username') }}">
             <input type="text" class="form-control" disabled
-                    id="username" name="username" readonly value="{{ session()->get('username') }}">
+                    id="username" name="username" readonly value="{{ $user->username }}">
         </div>
 
         <div class="mb-3 mt-3">
