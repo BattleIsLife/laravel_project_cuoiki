@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('like_chapter_history', function (Blueprint $table) {
             $table->id(); // Keep a simple primary key
-            $table->foreignUuid('chapter_id')->references('id')->on('chapters');
-            $table->foreignUuid('user_id')->references('id')->on('users');
+            $table->foreignUuid('chapter_id')->references('id')->on('chapters')->onDelete('cascade');
+            $table->foreignUuid('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->unique(['chapter_id', 'user_id']);
             $table->timestamps();
         });

@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('upvote_chapter_comment_history', function (Blueprint $table) {
             $table->id(); // Keep a simple primary key
-            $table->foreignUuid('comment_id')->references('id')->on('chapter_comments');
-            $table->foreignUuid('user_id')->references('id')->on('users');
+            $table->foreignUuid('comment_id')->references('id')->on('chapter_comments')->onDelete('cascade');
+            $table->foreignUuid('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->unique(['comment_id', 'user_id']);
             $table->tinyInteger('count')->default(1); // 1 là upvote còn -1 là downvote, dùng để tính điểm tổng
             $table->timestamps();
