@@ -85,7 +85,7 @@ class AuthController extends Controller
             $request->session()->regenerate();
 
             // Chuyển hướng người dùng về trang Profile hoặc trang trước đó họ đang xem dở
-            return redirect()->intended(route('home'))->with('success', 'Đăng nhập thành công');
+            return redirect()->intended(route('user.profile'))->with('success', 'Đăng nhập thành công');
         }
 
         // 3. Nếu sai tài khoản/mật khẩu -> Ném thông báo lỗi chung về Session
