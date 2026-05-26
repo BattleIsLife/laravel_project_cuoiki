@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Fiction;
+use App\Models\Series;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -92,9 +94,92 @@ class AuthController extends Controller
         return back()->with('error', 'Tài khoản hoặc mật khẩu không chính xác.')->withInput();
     }
 
+
+    // =========================================================
+    // Đổi thông tin
+    // Route: GET /author/change_info
+    // =========================================================
+    public function change_info()
+    {
+        return view('user.change_password');
+    }
+
+    // =========================================================
+    // Xác nhận đổi thông tin
+    // Route: PUT /author/change_info
+    // =========================================================    
+    public function change_info_attempt(Request $request)
+    {
+        $request->validate([
+            'email'    => 'required|string|email|max:255',
+            'new_password' => 'required|string|min:6'
+        ], [
+            // Custom thông báo lỗi bằng tiếng Việt nếu muốn
+            'new_password.min' => 'Mật khẩu phải chứa ít nhất 6 ký tự.',
+        ]);
+
+        $user = Auth::guard('web')->user();
+
+        $exist_email = User::whereEmail(trim($request->email))->where('id', '!=', $user->id)->exists();
+        if($exist_email)
+            return back()->with('error', 'Email này đã được người khác đăng ký');
+
+        $user->email = trim($request->email);
+        $user->password = Hash::make(trim($request->new_password));
+        if($user->save())
+            return redirect()->route('user.profile')->with('success', 'Thay đổi thông tin thành công');
+
+        return redirect()->route('user.profile')->with('error', 'Thay đổi thông tin thất bại');
+    }
+
+
+    // =========================================================
+    // Xóa tài khoản
+    // Route: GET /author/delete_account
+    // =========================================================
+    public function delete_account()
+    {
+        return view('user.delete_account');
+    }
+
+    public function delete_account_attempt(Request $request)
+    {
+        $request->validate([
+            'email'    => 'required|string|email|max:255',
+            'password' => 'required|string|min:6'
+        ], [
+            // Custom thông báo lỗi bằng tiếng Việt nếu muốn
+            'password.min' => 'Mật khẩu phải chứa ít nhất 6 ký tự.',
+        ]);
+
+        $user = Auth::guard('web')->user();
+
+        if($user->email !== trim($request->email))
+            return back()->with('error', 'Email không chính xác');
+        else if(!Hash::check(trim($request->password), $user->password))
+            return back()->with('error', 'Mật khẩu không chính xác');
+
+        if($user->delete())
+        {
+            Series::where('user_id', $user->id)->delete();
+            Fiction::where('user_id', $user->id)->delete();
+
+            Auth::guard('web')->logout();
+
+            // Xóa session và tạo CSRF token mới
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return redirect()->route('user.login')->with('error', 'Đã xóa tài khoản');
+        }
+
+        return back()->with('error', 'Xóa tài khoản thất bại');
+    }
+
+
     // =========================================================
     // Đăng xuất
-    // Route: POST /logout
+    // Route: POST /author/logout
     // =========================================================
     public function logout(Request $request)
     {
