@@ -27,4 +27,9 @@ class ChapterComment extends Model
     {
         return $this->belongsTo(Chapter::class, 'chapter_id');
     }
+
+    public function upvote_history()
+    {
+        return $this->hasMany(UpvoteChapterCommentHistory::class, 'chapter_id');
+    }
 }
