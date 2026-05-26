@@ -22,7 +22,7 @@
     <div class="col-sm-6">
         <p>Email: <i>{{ auth()->guard('web')->user()->email }}</i></p>
     </div>
-    <p><a href=">">Đổi mật khẩu</a></p>
+    <p><a href="{{ @route('user.change_info') }}">Thay đổi thông tin</a></p>
 </div>
 
 @endsection
