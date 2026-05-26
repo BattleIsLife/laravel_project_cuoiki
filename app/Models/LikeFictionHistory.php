@@ -10,7 +10,7 @@ class LikeFictionHistory extends Model
 
     protected $fillable = [
         'user_id',
-        'comment_id'
+        'fiction_id'
     ];
 
     public function user()
