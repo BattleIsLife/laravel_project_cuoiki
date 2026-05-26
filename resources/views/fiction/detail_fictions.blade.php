@@ -17,7 +17,7 @@
             <div class="row">
                 <div class="col-sm-3 d-flex mt-2 justify-content-center">
                     <div id="imagePreview" class="" style="width: 162px; height: 255px; background-color: gray;">
-                        <img id="previewImg" src="" alt="" class="img-fluid rounded" style="width: inherit; height: inherit;">
+                        <img id="previewImg" src="{{ $fiction->image_link ? asset('storage/' . $fiction->image_link) : asset('logo/favicon.jpeg') }}" alt="{{ $fiction->fiction_name }}" class="img-fluid rounded" style="width: inherit; height: inherit; object-fit: cover;">
                     </div>
                 </div>
 
@@ -25,12 +25,15 @@
                     <div class="container-sm card p-4">
                         <h1 class="text-center">Thông tin truyện</h1>
 
-                        <h4 class="text-center mt-3 mb-3"></h4>
+                        <h4 class="text-center mt-3 mb-3">{{ $fiction->fiction_name }}</h4>
+                        <p>Tác giả: <strong>{{ $fiction->author->username ?? 'Không rõ' }}</strong></p>
+                        <p>Series: <strong>{{ $fiction->series->series_name ?? 'Không có' }}</strong></p>
+                        <p>Lượt thích: {{ $fiction->like_fiction_history_count }}</p>
 
                         <div class="mb-3">
                             <label for="fiction_description" class="form-label">Mô tả truyện:</label>
 
-                            <textarea class="form-control" disabled readonly rows="10" ></textarea>
+                            <textarea class="form-control" disabled readonly rows="10" >{{ $fiction->description }}</textarea>
                         </div>
                     </div>
                 </div>
@@ -43,7 +46,14 @@
         <div class="container-sm card p-4 mt-5">
             <h2 class="text-center">Mục lục chương</h2>
             <div class="d-flex flex-column">
-               
+                @forelse ($chapters as $chapter)
+                    <div class="card p-3 mt-3">
+                        <h5 class="mb-1">Chương {{ $chapter->chapter_order }}: {{ $chapter->chapter_name }}</h5>
+                        <p class="mb-0">Lượt xem: {{ $chapter->watch_count }}</p>
+                    </div>
+                @empty
+                    <div class="alert alert-info mt-3 text-center">Truyện này chưa có chương nào.</div>
+                @endforelse
             </div>
         </div>
     </div>

@@ -20,5 +20,10 @@
     </div>
 </div>
 </div>
+<script>
+    const BASE_URL = "{{ url('/') }}";
+    const CSRF_TOKEN = "{{ csrf_token() }}";
+</script>
 <script src="{{ @asset('js/edit_fiction.js') }}"></script>
+<script src="{{ @asset('js/delete_fiction.js') }}"></script>
 @endsection
