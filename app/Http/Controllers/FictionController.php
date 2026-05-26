@@ -12,13 +12,13 @@ class FictionController extends Controller
     {
         $keyword = trim((string) $request->query('q', ''));
 
-        $fictions = Fiction::with(['users', 'series'])->whereHas('chapters')
+        $fictions = Fiction::with(['author', 'series'])//->whereHas('chapters')
             ->withCount('like_fiction_history')
             ->when($keyword !== '', function ($query) use ($keyword) {
                 $query->where(function ($inner) use ($keyword) {
                     $inner->where('fiction_name', 'like', "%{$keyword}%")
                         ->orWhere('description', 'like', "%{$keyword}%")
-                        ->orWhereHas('users', function ($authorQuery) use ($keyword) {
+                        ->orWhereHas('author', function ($authorQuery) use ($keyword) {
                             $authorQuery->where('username', 'like', "%{$keyword}%");
                         });
                 });
