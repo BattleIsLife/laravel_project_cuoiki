@@ -1,5 +1,6 @@
 @extends('user.profile')
 @section('user_profile_component')
+<meta name="csrf-token" content="{{ csrf_token() }}">
 <link rel="stylesheet" href="{{ @asset('css/series_list.css') }}">
 <h2 class="text-center">Danh sách series</h2>
 <!-- The floating button -->
@@ -15,21 +16,21 @@
     </div>
 @endif
 <div class="container d-flex justify-content-end">
-    <a class="btn btn-success" href="">
+    <a class="btn btn-success" href="{{ route('user.new_series') }}">
         Thêm series mới
     </a>
 </div>
 <div class="d-flex flex-column">
-    @if (count($series) == 0)
+    @if (count($allSeries) == 0)
         <div class="mt-3">
             <h4 class="text-center">Bạn chưa có series nào, bấm vào nút <i>"Thêm series mới"</i> để bắt đầu tạo series của bạn</h4>
         </div>
     @else
-        @foreach ($series as $series)
+        @foreach ($allSeries as $series)
             <div class="series card p-3 mt-3 ms-2 me-2">
                 <img class="cover_image" src="{{ @asset('storage/' . $series->image_link) }}">
                 <div class="series-info ms-3">
-                    <a href="{{ @url('author/edit_series/' . $series->id) }}"><h4 class="fic-title">{{ $series->series_name }}</h4></a>  
+                    <a href="{{ @url('author/edit_series/' . $series->id) }}"><h4 class="series-title">{{ $series->series_name }}</h4></a>  
                     <p>Ngày đăng tải: <i>{{ $series->created_at }}</i></p>
                     <p>Cập nhật lần cuối: <i>{{ $series->updated_at }}</i></p>
                     <div>
@@ -45,6 +46,10 @@
                 </div>
             </div>
         @endforeach
+
+        <div class="d-flex flex-column justify-content-center mt-4">
+            {{ $allSeries->links('pagination::bootstrap-5') }}
+        </div>
     @endif
 </div>
 
