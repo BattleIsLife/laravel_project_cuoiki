@@ -16,8 +16,8 @@
 
 img.cover_image
 {
-    max-width: 108px;
-    max-height: 170px;
+    width: 108px;
+    height: 170px;
 }
 
 @media (max-width: 866px) {
