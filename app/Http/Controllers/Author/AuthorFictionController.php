@@ -58,7 +58,7 @@ class AuthorFictionController extends Controller
             ->get();
 
         $chapters = Chapter::where('fiction_id', $fiction->id)
-            ->orderBy('chapter_order')
+            ->orderBy('chapter_order', 'desc')
             ->get();
 
         return view('fiction.edit_fictions', compact('fiction', 'series', 'chapters'));
