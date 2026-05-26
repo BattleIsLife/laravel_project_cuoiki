@@ -77,6 +77,17 @@ Route::prefix('author')->middleware('check.user.login')->group(function(){
     // Xóa series
     Route::delete('/delete_series/{id}', [AuthorSeriesController::class, 'delete']);
 
+
     // // Đăng xuất tài khoản
     Route::post('/logout', [AuthController::class, 'logout']);
+
+
+    // Đổi thông tin
+    Route::get('/change_info', [AuthController::class, 'change_info'])->name('user.change_info');
+    Route::put('/change_info', [AuthController::class, 'change_info_attempt']);
+
+
+    // Xóa tài khoản
+    Route::get('delete_account', [AuthController::class, 'delete_account'])->name('user.delete_account');
+    Route::delete('delete_account', [AuthController::class, 'delete_account_attempt']);
 });
