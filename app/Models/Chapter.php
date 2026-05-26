@@ -29,4 +29,9 @@ class Chapter extends Model
     {
         return $this->belongsTo(ChapterComment::class, 'chapter_id');
     }
+
+    public function like_chapter_history()
+    {
+        return $this->hasMany(LikeChapterHistory::class, 'chapter_id');
+    }
 }
