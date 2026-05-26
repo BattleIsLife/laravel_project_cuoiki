@@ -63,7 +63,7 @@
 
                 <!-- Modal Header -->
                 <div class="modal-header">
-                    <h4 class="modal-title">Xác nhận muốn xóa <strong id="delete_stuff">?</h4>
+                    <h4 class="modal-title">Xác nhận muốn xóa <strong id="delete_stuff">?</strong></h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
 
