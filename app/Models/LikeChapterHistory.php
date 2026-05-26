@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class LikeChapterHistory extends Model
 {
     //
-    protected $table="like_fiction_history";
+    protected $table="like_chapter_history";
 
     protected $fillable = [
         'user_id',
@@ -21,6 +21,6 @@ class LikeChapterHistory extends Model
 
     public function chapter()
     {
-        require $this->belongsTo(Fiction::class, 'chapter_id');
+        require $this->belongsTo(Chapter::class, 'chapter_id');
     }
 }
