@@ -39,6 +39,7 @@ Route::prefix('author')->middleware('check.user.login')->group(function(){
     Route::get('/', [ProfileController::class, 'index'])->name('user.profile');
     Route::get('/profile', [ProfileController::class, 'index']);
 
+
     // Truyện
     Route::get('/fiction_list', [AuthorFictionController::class, 'index'])->name('user.fiction_list');
     Route::get('/new_fiction', [AuthorFictionController::class, 'create'])->name('user.new_fiction');
@@ -47,24 +48,20 @@ Route::prefix('author')->middleware('check.user.login')->group(function(){
     Route::post('/edit_fiction/{fictionId}', [AuthorFictionController::class, 'update']);
     Route::delete('/delete_fiction/{fictionId}', [AuthorFictionController::class, 'delete'])->name('user.delete_fiction');
 
+
     // Series
     // Danh sách series
     Route::get('/series_list', [AuthorSeriesController::class, 'index'])->name('user.series_list');
-
     // Tạo series
     Route::get('/new_series', [AuthorSeriesController::class, 'create'])->name('user.new_series');
     Route::post('/new_series', [AuthorSeriesController::class, 'create_attempt']);
-
     // Sửa series
     Route::get('/edit_series/{id}', [AuthorSeriesController::class, 'edit']);
     Route::put('/edit_series/{id}', [AuthorSeriesController::class, 'edit_attempt']);
-
     // Thêm truyện vào series
     Route::post('/edit_series/{id}/add_fiction', [AuthorSeriesController::class, 'add_fiction_to_series']);
-
     // Xóa truyện khỏi series
     Route::delete('/edit_series/remove_fiction/{id}', [AuthorSeriesController::class, 'delete_fiction_from_series']);
-
     // Xóa series
     Route::delete('/delete_series/{id}', [AuthorSeriesController::class, 'delete']);
 
