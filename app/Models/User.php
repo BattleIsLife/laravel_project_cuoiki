@@ -59,4 +59,24 @@ class User extends Authenticatable
     {
         return $this->hasMany(ChapterComment::class, 'user_id');
     }
+
+    public function like_fiction_history()
+    {
+        return $this->hasMany(LikeFictionHistory::class, 'user_id');
+    }
+
+    public function like_chapter_history()
+    {
+        return $this->hasMany(LikeChapterHistory::class, 'user_id');
+    }
+
+    public function upvote_chapter_comment_history()
+    {
+        return $this->hasMany(UpvoteChapterCommentHistory::class, 'user_id');
+    }
+
+    public function upvote_moderator_post_comment_history()
+    {
+        return $this->hasMany(UpvoteModeratorPostCommentHistory::class, 'user_id');
+    }
 }
