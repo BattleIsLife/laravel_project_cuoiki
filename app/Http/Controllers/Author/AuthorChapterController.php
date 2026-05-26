@@ -3,41 +3,24 @@
 namespace App\Http\Controllers\Author;
 
 use App\Http\Controllers\Controller;
-use App\Models\Chapter;
-use App\Models\Fiction;
 use Illuminate\Http\Request;
+use App\Models\Fiction;
+use App\Models\Chapter;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
+use Mews\Purifier\Facades\Purifier;
 
 class AuthorChapterController extends Controller
 {
     // =========================================================
-    // Danh sách chương của một truyện
-    // Route: GET /author/fictions/{fictionId}/chapters
-    // View : chapter/all_chapters
-    // =========================================================
-    public function index($fictionId)
-    {
-        $fiction = Fiction::where('id', $fictionId)
-            ->where('user_id', Auth::id())
-            ->firstOrFail();
-
-        $chapters = Chapter::where('fiction_id', $fictionId)
-            ->orderBy('chapter_order')
-            ->paginate(20);
-
-        return view('chapter.all_chapters', compact('fiction', 'chapters'));
-    }
-
-    // =========================================================
     // Form tạo chương mới
-    // Route: GET /author/fictions/{fictionId}/chapters/create
+    // Route: GET /author/edit_fictions/{fictionId}/chapters/create
     // View : chapter/new_chapters
     // =========================================================
-    public function create($fictionId)
+    public function create(string $fictionId)
     {
         $fiction = Fiction::where('id', $fictionId)
-            ->where('user_id', Auth::id())
+            ->where('user_id', Auth::guard('web')->user()->id)
             ->firstOrFail();
 
         // Số thứ tự gợi ý = max hiện tại + 1
@@ -50,11 +33,11 @@ class AuthorChapterController extends Controller
     // Lưu chương mới (draft hoặc đăng luôn)
     // Route: POST /author/fictions/{fictionId}/chapters
     // =========================================================
-    public function store(Request $request, $fictionId)
+    public function store(Request $request, string $fictionId)
     {
-        $fiction = Fiction::where('id', $fictionId)
-            ->where('user_id', Auth::id())
-            ->firstOrFail();
+        $fiction = Fiction::whereId($fictionId)
+            ->where('user_id', Auth::guard('web')->user()->id)
+            ->firstOrFail('id');
 
         $request->validate([
             'chapter_name' => [
@@ -64,7 +47,6 @@ class AuthorChapterController extends Controller
             ],
             'chapter_order' => 'required|integer|min:1',
             'content'       => 'nullable|string',
-            'action'        => 'required|in:draft,publish',
         ], [
             'chapter_name.required' => 'Vui lòng nhập tên chương.',
             'chapter_name.unique'   => 'Tên chương này đã tồn tại trong truyện.',
@@ -77,32 +59,32 @@ class AuthorChapterController extends Controller
             'fiction_id'    => $fictionId,
             'chapter_name'  => $request->chapter_name,
             'chapter_order' => $request->chapter_order,
-            'content'       => $request->content,
-            'is_posted'     => $request->action === 'publish' ? 1 : 0,
+            'content'       => Purifier::clean($request->content),
+            'is_posted'     => !$request->boolean('save_as_draft') ? 1 : 0,
             'watch_count'   => 0,
         ]);
 
-        $msg = $request->action === 'publish'
+        $msg = !$request->boolean('save_as_draft')
             ? 'Đã đăng chương thành công!'
             : 'Đã lưu bản nháp.';
 
         return redirect()
-            ->route('author.chapters.index', $fictionId)
+            ->route('user.edit_fiction', $fictionId)
             ->with('success', $msg);
     }
 
     // =========================================================
     // Form chỉnh sửa chương
-    // Route: GET /author/fictions/{fictionId}/chapters/{chapterId}/edit
+    // Route: GET /author/edit_fiction/{fictionId}/edit_chapter/{chapterId}
     // View : chapter/edit_chapters
     // =========================================================
-    public function edit($fictionId, $chapterId)
+    public function edit(string $fictionId, string $chapterId)
     {
-        $fiction = Fiction::where('id', $fictionId)
-            ->where('user_id', Auth::id())
-            ->firstOrFail();
+        $fiction = Fiction::whereId($fictionId)
+            ->where('user_id', Auth::guard('web')->user()->id)
+            ->firstOrFail('id');
 
-        $chapter = Chapter::where('id', $chapterId)
+        $chapter = Chapter::whereId($chapterId)
             ->where('fiction_id', $fictionId)
             ->firstOrFail();
 
@@ -111,29 +93,26 @@ class AuthorChapterController extends Controller
 
     // =========================================================
     // Cập nhật nội dung chương (draft hoặc đăng)
-    // Route: PUT /author/fictions/{fictionId}/chapters/{chapterId}
+    // Route: PUT /author/edit_fiction/{fictionId}/edit_chapter/{chapterId}
     // =========================================================
-    public function update(Request $request, $fictionId, $chapterId)
+    public function update(Request $request, string $fictionId, string $chapterId)
     {
-        Fiction::where('id', $fictionId)
-            ->where('user_id', Auth::id())
-            ->firstOrFail();
+        Fiction::whereId($fictionId)
+            ->where('user_id', Auth::guard('web')->user()->id)
+            ->firstOrFail('id');
 
-        $chapter = Chapter::where('id', $chapterId)
+        $chapter = Chapter::whereId($chapterId)
             ->where('fiction_id', $fictionId)
             ->firstOrFail();
 
         $request->validate([
             'chapter_name' => [
                 'required', 'string', 'max:100',
-                // FIX: unique trong cùng truyện, bỏ qua chính nó khi update
-                Rule::unique('chapters', 'chapter_name')
-                    ->where('fiction_id', $fictionId)
-                    ->ignore($chapterId),
+                // FIX: unique chỉ trong cùng 1 truyện, không phải toàn bảng
+                Rule::unique('chapters', 'chapter_name')->where('fiction_id', $fictionId)->whereNot('id', $chapterId),
             ],
             'chapter_order' => 'required|integer|min:1',
             'content'       => 'nullable|string',
-            'action'        => 'required|in:draft,publish',
         ], [
             'chapter_name.required' => 'Vui lòng nhập tên chương.',
             'chapter_name.unique'   => 'Tên chương này đã tồn tại trong truyện.',
@@ -142,30 +121,28 @@ class AuthorChapterController extends Controller
             'chapter_order.min'     => 'Số thứ tự phải lớn hơn 0.',
         ]);
 
-        $chapter->update([
-            'chapter_name'  => $request->chapter_name,
-            'chapter_order' => $request->chapter_order,
-            'content'       => $request->content,
-            'is_posted'     => $request->action === 'publish' ? 1 : 0,
-        ]);
+        $chapter->chapter_name = $request->chapter_name;
+        $chapter->chapter_order = $request->chapter_order;
+        $chapter->content = Purifier::clean($request->content);
+        $chapter->is_posted = !$request->boolean('save_as_draft') ? 1 : 0;
 
-        $msg = $request->action === 'publish'
+        $chapter->save();
+
+        $msg = !$request->boolean('save_as_draft')
             ? 'Đã cập nhật và đăng chương!'
             : 'Đã lưu bản nháp.';
 
-        return redirect()
-            ->route('author.chapters.edit', [$fictionId, $chapterId])
-            ->with('success', $msg);
+        return redirect('author/edit_fiction/'. $fictionId)->with('success', $msg);
     }
 
     // =========================================================
     // [AJAX] Xóa chương
     // Route: DELETE /author/fictions/{fictionId}/chapters/{chapterId}
     // =========================================================
-    public function destroy($fictionId, $chapterId)
+    public function destroy(string $fictionId, string $chapterId)
     {
         Fiction::where('id', $fictionId)
-            ->where('user_id', Auth::id())
+            ->where('user_id', Auth::guard('web')->user()->id)
             ->firstOrFail();
 
         $chapter = Chapter::where('id', $chapterId)
@@ -177,31 +154,6 @@ class AuthorChapterController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Đã xóa chương.',
-        ]);
-    }
-
-    // =========================================================
-    // [AJAX] Đổi trạng thái draft ↔ published nhanh từ danh sách
-    // Route: POST /author/fictions/{fictionId}/chapters/{chapterId}/toggle
-    // =========================================================
-    public function togglePublish($fictionId, $chapterId)
-    {
-        Fiction::where('id', $fictionId)
-            ->where('user_id', Auth::id())
-            ->firstOrFail();
-
-        $chapter = Chapter::where('id', $chapterId)
-            ->where('fiction_id', $fictionId)
-            ->firstOrFail();
-
-        // FIX: lấy giá trị mới sau khi update để trả label đúng
-        $newStatus = $chapter->is_posted ? 0 : 1;
-        $chapter->update(['is_posted' => $newStatus]);
-
-        return response()->json([
-            'success'   => true,
-            'is_posted' => $newStatus,
-            'label'     => $newStatus ? 'Đã đăng' : 'Bản nháp',
         ]);
     }
 }
