@@ -14,7 +14,8 @@ class Series extends Model
     protected $fillable = [
         'series_name',
         'user_id',
-        'description'
+        'description',
+        'image_link'
     ];
 
     public function author()
