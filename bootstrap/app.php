@@ -14,7 +14,8 @@ return Application::configure(basePath: dirname(__DIR__))
         //
         $middleware->alias([
             'check.user.login' => \App\Http\Middleware\AuthenticateUser::class,
-            'check.user.guest' => \App\Http\Middleware\CheckUserGuest::class
+            'check.user.guest' => \App\Http\Middleware\CheckUserGuest::class,
+            'check.moderator.login' => App\Http\Middleware\AuthenticateModerator::class
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
