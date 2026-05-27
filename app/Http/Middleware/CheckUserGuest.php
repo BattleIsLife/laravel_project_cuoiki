@@ -16,8 +16,12 @@ class CheckUserGuest
      */
     public function handle(Request $request, Closure $next): Response
     {
+        // Kiểm tra cả user và moderator để tránh việc moderator vẫn có thể đăng nhập user và ngược lại
         if(Auth::guard('web')->check())
             return redirect()->route('user.profile');
+
+        if(Auth::guard('moderator')->check())
+            return redirect()->route('home');
         return $next($request);
     }
 }
