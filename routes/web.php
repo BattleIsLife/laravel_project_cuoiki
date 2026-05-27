@@ -8,16 +8,15 @@ use App\Http\Controllers\FictionController;
 use App\Http\Controllers\Author\AuthorFictionController;
 use App\Http\Controllers\Author\AuthorChapterController;
 use App\Http\Controllers\ChapterController;
+use App\Http\Controllers\SeriesController;
 use Illuminate\Support\Facades\Route;
 
 Route::controller(HomeController::class)->group(function(){
     // Trang chủ
     Route::get('/', 'index')->name('home');
     Route::get('/home', 'index');
-
-    // Danh sách series mới nhất
-    Route::get('/all_series', 'all_series')->name('all_series');
 });
+
 
 // Route xử lý truyện
 Route::controller(FictionController::class)->group(function(){
@@ -26,8 +25,17 @@ Route::controller(FictionController::class)->group(function(){
     Route::get('/fiction/{fictionId}', 'show')->name('fiction.detail');
 });
 
+
+// Route xử lý series
+Route::controller(SeriesController::class)->group(function(){
+    Route::get('/all_series', 'index')->name('all_series');
+    Route::get('/series/{seriesId}', 'show')->name('series.detail');
+});
+
+
 // Route xử lý chương
 Route::get('/chapter/{chapterId}', [ChapterController::class, 'show']);
+
 
 // Route xử lý đăng nhập, đăng ký user
 Route::controller(AuthController::class)->middleware('check.user.guest')->group(function(){
@@ -40,6 +48,8 @@ Route::controller(AuthController::class)->middleware('check.user.guest')->group(
     Route::post('/register', 'register');
 });
 
+
+// Route tác giả
 Route::prefix('author')->middleware('check.user.login')->group(function(){
     // Trang thông tin người dùng
     Route::get('/', [ProfileController::class, 'index'])->name('user.profile');
