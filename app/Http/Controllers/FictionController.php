@@ -35,8 +35,8 @@ class FictionController extends Controller
 
         $chapters = Chapter::withCount('like_chapter_history')->where('fiction_id', $fictionId)
             ->where('is_posted', 1)
-            ->orderBy('chapter_order')
-            ->get();
+            ->orderBy('chapter_order','desc')
+            ->paginate(10);
 
         return view('fiction.detail_fictions', compact('fiction', 'chapters'));
     }
