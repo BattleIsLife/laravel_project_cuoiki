@@ -52,6 +52,10 @@
                         <p class="mb-0">Lượt xem: {{ $chapter->watch_count }}</p>
                         <p class="mb-0">Lượt thích: {{ $chapter->like_chapter_history_count }}</p>
                     </div>
+
+                    <div class="d-flex flex-column justify-content-center mt-4">
+                        {{ $chapters->links('pagination::bootstrap-5') }}
+                    </div>
                 @empty
                     <div class="alert alert-info mt-3 text-center">Truyện này chưa có chương nào.</div>
                 @endforelse
