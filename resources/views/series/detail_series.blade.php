@@ -56,7 +56,7 @@
                         {{ $fictions->links('pagination::bootstrap-5') }}
                     </div>
                 @empty
-                    <div class="alert alert-info mt-3 text-center">Truyện này chưa có chương nào.</div>
+                    <div class="alert alert-info mt-3 text-center">Series này chưa có truyện nào.</div>
                 @endforelse
             </div>
         </div>
