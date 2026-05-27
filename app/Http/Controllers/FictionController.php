@@ -11,22 +11,19 @@ class FictionController extends Controller
     public function index(Request $request)
     {
         $keyword = trim((string) $request->query('q', ''));
-
+            
         $fictions = Fiction::with(['author', 'series'])->whereHas('chapters')
             ->withCount('like_fiction_history')
             ->when($keyword !== '', function ($query) use ($keyword) {
-                $query->where(function ($inner) use ($keyword) {
-                    $inner->where('fiction_name', 'like', "%{$keyword}%")
-                        ->orWhere('description', 'like', "%{$keyword}%")
+                $query->where('fiction_name', 'like', "%{$keyword}%")
                         ->orWhereHas('author', function ($authorQuery) use ($keyword) {
                             $authorQuery->where('username', 'like', "%{$keyword}%");
                         });
-                });
             })
             ->latest()
             ->paginate(20)
             ->withQueryString();
-
+            
         return view('fiction.all_fictions', compact('fictions', 'keyword'));
     }
 
