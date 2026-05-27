@@ -21,7 +21,7 @@ class CheckUserGuest
             return redirect()->route('user.profile');
 
         if(Auth::guard('moderator')->check())
-            return redirect()->route('home');
+            return redirect()->route('admin.dashboard');
         return $next($request);
     }
 }
