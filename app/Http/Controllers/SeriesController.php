@@ -34,12 +34,19 @@ class SeriesController extends Controller
 
     public function show(string $seriesId)
     {
-        $series = Series::with('fictions')
+        $series = Series::whereHas('fictions', function ($fiction) {
+                $fiction->whereHas('chapters', function ($chapter) {
+                    $chapter->where('is_posted', '=', 1);
+                });
+            })
             ->findOrFail($seriesId);
 
-        $fictions = $series->fictions()->withCount('like_fiction_history')
-                    ->latest()
-                    ->paginate(10);
+        $fictions = $series->fictions()->whereHas('chapters', function ($chapter) {
+                    $chapter->where('is_posted', '=', 1);
+                })
+                ->withCount('like_fiction_history')
+                ->latest()
+                ->paginate(10);
 
         return view('series.detail_series', compact('series', 'fictions'));
     }
