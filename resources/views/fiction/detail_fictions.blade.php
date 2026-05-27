@@ -1,5 +1,8 @@
 @extends('main')
 @section('content')
+@php
+    $moderator = auth()->guard('moderator')->user();
+@endphp
 <ul class="nav nav-tabs justify-content-center">
   <li class="nav-item">
     <a class="nav-link active" data-bs-toggle="tab" href="#fiction_info">Thông tin truyện</a>
@@ -51,6 +54,18 @@
                         <a href="{{ url('/chapter/' . $chapter->id) }}"><h5 class="mb-1">{{ $chapter->chapter_name }}</h5></a>
                         <p class="mb-0">Lượt xem: {{ $chapter->watch_count }}</p>
                         <p class="mb-0">Lượt thích: {{ $chapter->like_chapter_history_count }}</p>
+                        @if($moderator && $moderator->permission == 'user_moderator')
+                            <div>
+                                <a class="btn btn-danger delete-btn" style="width: fit-content; height: fit-content;" 
+                                data-bs-toggle="modal"
+                                data-bs-target="#deleteModal"
+                                data-id="{{ $fiction->id }}"
+                                data-name="{{ $fiction->fiction_name }}"
+                                onclick="get_delete_id(this)">
+                                    Xóa chương
+                                </a>
+                            </div>
+                        @endif
                     </div>
 
                     <div class="d-flex flex-column justify-content-center mt-4">
