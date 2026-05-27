@@ -1,3 +1,7 @@
+@php
+    $moderator = auth()->guard('moderator')->user();
+    $user = auth()->guard('web')->user();
+@endphp
 <nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top">
     <div class="container-fluid">
         <a class="navbar-brand" href="{{ route('home') }}">
@@ -26,7 +30,7 @@
                 <li class="navbar-nav">
                     <li class="nav-item"><a class="nav-link" href="{{ @route('about_me') }}">About us</a></li>
                     {{-- Sau khi đăng nhập user --}}
-                    @auth('web')
+                    @if ($user)
                         <a class="nav-link" href="{{ route('user.new_fiction') }}">Bắt đầu viết truyện</a>
                         <a class="nav-link fw-bold" href="{{ route('user.profile') }}">{{ auth()->guard('web')->user()->username }}</a>
                         <a href="{{ url('/author/logout') }}" class="nav-link fw-bold text-danger" 
@@ -38,28 +42,26 @@
                         <form id="user-logout-form" action="{{ url('/author/logout') }}" method="POST" style="display: none;">
                             @csrf
                         </form>
-                    @endauth
 
                     {{-- Sau khi đăng nhập moderator --}}
-                    @auth('moderator')
+                    @elseif($moderator)
                         <a class="nav-link" href="">Dashboard</a>
                         <a class="nav-link" href="">{{ auth()->guard('moderator')->user()->username }}</a>
-                        <a href="{{ url('/moderator/logout') }}" class="nav-link fw-bold text-danger" 
+                        <a href="{{ route('admin.logout') }}" class="nav-link fw-bold text-danger" 
                             onclick="event.preventDefault(); document.getElementById('moderator-logout-form').submit();">
                             Đăng xuất
                         </a>
 
                         <!-- Hidden Logout Form -->
-                        <form id="moderator-logout-form" action="{{ url('/moderator/logout') }}" method="POST" style="display: none;">
+                        <form id="moderator-logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
                             @csrf
                         </form>
-                    @endauth
 
                     {{-- Chưa đăng nhập/ Đã đăng xuất --}}
-                    @guest()
+                    @else
                         <a class="nav-link" href="{{ route('user.login') }}">Đăng nhập</a>
                         <a class="nav-link" href="{{ route('user.register') }}">Đăng ký</a>
-                    @endguest
+                    @endif
                 </li>
             </ul>
         </div>
