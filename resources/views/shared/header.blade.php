@@ -16,7 +16,7 @@
                     {{-- Tí nữa thay link mới sau --}}
                     <form class="d-flex" role="search" 
                           method="get" action="{{ route('all_fictions') }}">
-                        <input class="form-control me-2" type="search" name="q" placeholder="Tìm kiếm tên truyện" aria-label="Search">
+                        <input class="form-control me-2" type="search" name="q" placeholder="Tìm kiếm tên truyện, tác giả" aria-label="Search">
                         <button class="btn btn-outline-success" type="submit">Search</button>
                     </form>
                 </li>

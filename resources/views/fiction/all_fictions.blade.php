@@ -10,7 +10,7 @@
 </style>
 <div class="container-sm mt-3">
     <form class="d-flex" role="search" method="get" action="{{ route('all_fictions') }}">
-        <input class="form-control me-2" type="search" name="q" value="{{ $keyword ?? '' }}" placeholder="Tìm kiếm tên truyện" aria-label="Search">
+        <input class="form-control me-2" type="search" name="q" value="{{ $keyword ?? '' }}" placeholder="Tìm kiếm tên truyện, tác giả" aria-label="Search">
         <button class="btn btn-success" type="submit">Search</button>
     </form>
     <h3 class="text-center mt-5">Danh sách truyện</h3>
