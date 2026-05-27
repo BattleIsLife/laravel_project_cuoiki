@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Moderator\ModeratorAuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
@@ -108,4 +109,22 @@ Route::prefix('author')->middleware('check.user.login')->group(function(){
     // Xóa tài khoản
     Route::get('delete_account', [AuthController::class, 'delete_account'])->name('user.delete_account');
     Route::delete('delete_account', [AuthController::class, 'delete_account_attempt']);
+});
+
+
+// Route moderator
+Route::prefix('admin')->group(function(){
+    // Đăng nhập, đăng xuất moderator
+    Route::controller(ModeratorAuthController::class)->group(function(){
+        Route::get('/login', 'showLogin')->middleware('check.user.guest')->name('admin.login');
+        Route::post('/login', 'login')->middleware('check.user.guest');
+        
+        Route::post('/logout', 'logout')->middleware('check.moderator.login')->name('admin.logout');
+    });
+
+    Route::middleware('check.moderator.login')->group(function(){
+        Route::get('/dashboard', function(){
+            return view('admin.profile.dashboard');
+        })->name('admin.dashboard');
+    });
 });
