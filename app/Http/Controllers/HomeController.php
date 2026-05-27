@@ -48,6 +48,11 @@ class HomeController extends Controller
         return view('user.home', $data);
     }
 
+    public function about_me()
+    {
+        return view('about.about_me');
+    }
+
     // public function test()
     // {
     //     // $user = User::all()->first();
