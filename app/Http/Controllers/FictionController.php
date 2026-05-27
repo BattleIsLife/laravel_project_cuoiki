@@ -12,7 +12,11 @@ class FictionController extends Controller
     {
         $keyword = trim((string) $request->query('q', ''));
             
-        $fictions = Fiction::with(['author', 'series'])->whereHas('chapters')
+        // Chỉ hiển thị các trueyenj có đăng ít nhất 1 chương
+        $fictions = Fiction::with(['author', 'series'])
+            ->whereHas('chapters', function ($chapter) {
+                $chapter->where('is_posted', '=', 1);
+            })
             ->withCount('like_fiction_history')
             ->when($keyword !== '', function ($query) use ($keyword) {
                 $query->where('fiction_name', 'like', "%{$keyword}%")

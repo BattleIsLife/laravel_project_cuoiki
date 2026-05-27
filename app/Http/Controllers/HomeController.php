@@ -14,14 +14,23 @@ class HomeController extends Controller
     public function index()
     {
         // Top 8 truyện hot nhất theo lượt xem
-        $hotFictions = Fiction::whereHas('chapters')->withSum('chapters', 'watch_count')->withCount('like_fiction_history') // Tự động tính tổng cột 'views' trong bảng 'chapters'
+        // Truyện phải có đăng ít nhất 1 chương thì mới hiển thị
+        $hotFictions = Fiction::whereHas('chapters', function ($chapter) {
+                                    $chapter->where('is_posted', '=', 1);
+                                })
+                                ->withSum('chapters', 'watch_count')->withCount('like_fiction_history') // Tự động tính tổng cột 'views' trong bảng 'chapters'
                                 ->orderBy('chapters_sum_watch_count', 'desc') // Sắp xếp theo thực thể vừa tính
                                 ->take(8)
                                 ->get();
 
 
         // Top 8 series hot nhất theo lượt xem
-        $hotSeries = Series::whereHas('fictions')->withSum('chapters', 'watch_count') // Tự động tính tổng cột 'views' trong bảng 'chapters'
+        // Cần ít nhất 1 truyện trong series đăng 1 chương thì mới hiển thị
+        $hotSeries = Series::whereHas('fictions', function ($fiction) {
+                                $fiction->whereHas('chapters', function ($chapter) {
+                                    $chapter->where('is_posted', '=', 1);
+                                });
+                            })->withSum('chapters', 'watch_count') // Tự động tính tổng cột 'views' trong bảng 'chapters'
                             ->orderBy('chapters_sum_watch_count', 'desc') // Sắp xếp theo thực thể vừa tính
                             ->take(8)
                             ->get();

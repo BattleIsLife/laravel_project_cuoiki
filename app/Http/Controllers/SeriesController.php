@@ -13,7 +13,13 @@ class SeriesController extends Controller
 
         $keyword = trim((string) $request->query('q', ''));
 
-        $allSeries = Series::with('author')->whereHas('fictions')
+        // Chỉ hiển thị các series mà có ít nhất 1 truyện đăng chương
+        $allSeries = Series::with('author')
+            ->whereHas('fictions', function ($fiction) {
+                $fiction->whereHas('chapters', function ($chapter) {
+                    $chapter->where('is_posted', '=', 1);
+                });
+            })
             ->when($keyword !== '', function($query) use ($keyword){
                 $query->where('series_name', 'like', "%{$keyword}%")
                       ->orWhereHas('author', function ($authorQuery) use ($keyword) {
