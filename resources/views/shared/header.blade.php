@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-sm navbar-dark bg-dark sticky-top">
+<nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top">
     <div class="container-fluid">
         <a class="navbar-brand" href="{{ route('home') }}">
             <img src="{{ @asset('logo/favicon.jpeg') }}" alt="Logo" class="rounded-pill" style="width: 40px;">
@@ -24,6 +24,7 @@
 
             <ul class="navbar-nav ms-auto" id="nav-auth">
                 <li class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="{{ @route('about_me') }}">About us</a></li>
                     {{-- Sau khi đăng nhập user --}}
                     @auth('web')
                         <a class="nav-link" href="{{ route('user.new_fiction') }}">Bắt đầu viết truyện</a>
@@ -42,7 +43,7 @@
                     {{-- Sau khi đăng nhập moderator --}}
                     @auth('moderator')
                         <a class="nav-link" href="">Dashboard</a>
-                        <a class="nav-link" href="">Username here</a>
+                        <a class="nav-link" href="">{{ auth()->guard('moderator')->user()->username }}</a>
                         <a href="{{ url('/moderator/logout') }}" class="nav-link fw-bold text-danger" 
                             onclick="event.preventDefault(); document.getElementById('moderator-logout-form').submit();">
                             Đăng xuất
