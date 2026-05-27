@@ -14,7 +14,7 @@ class HomeController extends Controller
     public function index()
     {
         // Top 8 truyện hot nhất theo lượt xem
-        $hotFictions = Fiction::whereHas('chapters')->withSum('chapters', 'watch_count') // Tự động tính tổng cột 'views' trong bảng 'chapters'
+        $hotFictions = Fiction::whereHas('chapters')->withSum('chapters', 'watch_count')->withCount('like_fiction_history') // Tự động tính tổng cột 'views' trong bảng 'chapters'
                                 ->orderBy('chapters_sum_watch_count', 'desc') // Sắp xếp theo thực thể vừa tính
                                 ->take(8)
                                 ->get();
@@ -37,16 +37,6 @@ class HomeController extends Controller
         ];
 
         return view('user.home', $data);
-    }
-
-    public function all_fictions()
-    {
-        return view('fiction.all_fictions');
-    }
-
-    public function all_series()
-    {
-        return view('series.all_series');
     }
 
     // public function test()
