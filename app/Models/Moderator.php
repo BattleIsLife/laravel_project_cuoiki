@@ -7,7 +7,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Moderator extends Model
+class Moderator extends Authenticatable
 {
     use HasUuids, SoftDeletes;
 
