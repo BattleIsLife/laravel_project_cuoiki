@@ -80,7 +80,7 @@ class AuthController extends Controller
         }
 
         $blocked_user = User::whereUsername($credentials['username'])->first();
-        if($blocked_user->blocked_until && $blocked_user->blocked_until->isFuture())
+        if($blocked_user && $blocked_user->blocked_until && $blocked_user->blocked_until->isFuture())
             return back()->with('error', 'Tài khoản này bị chặn cho tới ' . $blocked_user->blocked_until)
                         ->withInput();
 
