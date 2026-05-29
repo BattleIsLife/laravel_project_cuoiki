@@ -30,6 +30,11 @@ class ChapterComment extends Model
 
     public function upvote_history()
     {
-        return $this->hasMany(UpvoteChapterCommentHistory::class, 'chapter_id');
+        return $this->hasMany(UpvoteChapterCommentHistory::class, 'comment_id');
+    }
+
+    public function child_comment()
+    {
+        return $this->hasMany(ChapterComment::class, 'parent_comment');
     }
 }
