@@ -2,6 +2,7 @@
 @section('content')
 @php
     $moderator = auth()->guard('moderator')->user();
+    $user =  auth()->guard('web')->user();
 @endphp
 <ul class="nav nav-tabs justify-content-center">
   <li class="nav-item">
@@ -31,9 +32,21 @@
                         <h4 class="text-center mt-3 mb-3">{{ $fiction->fiction_name }}</h4>
                         <p>Tác giả: <strong>{{ $fiction->author->username ?? 'Không rõ' }}</strong></p>
                         <p>Series: <strong>{{ $fiction->series->series_name ?? 'Không có' }}</strong></p>
-                        <p>Lượt thích: {{ $fiction->like_fiction_history_count }}</p>
+                        <p>Lượt thích: <span id="likeCount">{{ $fiction->like_fiction_history_count }}</span></p>
 
-                        <div class="mb-3">
+                        @if ($user)
+                            <div>
+                                <button class="btn btn-success btn-disabled" id="likeButton" onclick="like_fiction(this)"
+                                        data-bs-id="{{ $fiction->id }}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
+                                        <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143q.09.083.176.171a3 3 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15"/>
+                                    </svg>
+                                    Thích truyện này
+                                </button>
+                            </div>
+                        @endif
+
+                        <div class="mb-3 mt-3">
                             <label for="fiction_description" class="form-label">Mô tả truyện:</label>
 
                             <textarea class="form-control" disabled readonly rows="10" >{{ $fiction->description }}</textarea>
@@ -53,7 +66,18 @@
                     <div class="card p-3 mt-3">
                         <a href="{{ url('/chapter/' . $chapter->id) }}"><h5 class="mb-1">{{ $chapter->chapter_name }}</h5></a>
                         <p class="mb-0">Lượt xem: {{ $chapter->watch_count }}</p>
-                        <p class="mb-0">Lượt thích: {{ $chapter->like_chapter_history_count }}</p>
+                        <p class="mb-0">Lượt thích: <span class="likeChapterCount">{{ $chapter->like_chapter_history_count }}</span></p>
+                        @if ($user)
+                            <div>
+                                <button class="btn btn-success btn-disabled likeChapterButton" onclick="like_chapter(this)"
+                                        data-bs-id="{{ $chapter->id }}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
+                                        <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143q.09.083.176.171a3 3 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15"/>
+                                    </svg>
+                                    Thích chương này
+                                </button>
+                            </div>
+                        @endif
                         @if($moderator && $moderator->permission == 'user_moderator')
                             <div>
                                 <a class="btn btn-danger delete-btn" style="width: fit-content; height: fit-content;" 
@@ -78,5 +102,10 @@
         </div>
     </div>
 </div>
+<script>
+    const BASE_URL = "{{ url('') }}";
+    const CSRF_TOKEN = "{{ csrf_token() }}";
+</script>
+<script src="{{ @asset('js/interactions/like.js') }}"></script>
 
 @endsection
