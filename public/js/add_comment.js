@@ -79,3 +79,24 @@ ${comment.content}
 
     list.insertAdjacentHTML('afterbegin', commentHtml); // Thêm vào đầu list
 }
+
+// Tạo form phản hồi bình luận
+function reply_comment(btn, comment_id)
+{
+    const div_container = btn.closest('div.reply_comment');
+
+    div_container.innerHTML = `
+        <h4>Phản hồi bình luận</h4>
+        <input type="hidden" name="chapter_id" value=""> <!-- ID chapter hiện tại -->
+        <textarea class="form-control" rows="4"></textarea>
+        <div class="d-flex flex-row">
+            <button type="button" class="btn btn-success mt-3">Đăng tải bình luận</button>
+            <button type="button" class="btn btn-danger mt-3" onclick="revert_back(this)">Hủy</button>
+        </div>
+    `;
+}
+
+function revert_back(btn) {
+    const parent = btn.closest('div').parentElement;
+    parent.innerHTML = `<button class="btn btn-primary" onclick="reply_comment(this, '{{ $comment->id }}')">Phản hồi bình luận</button>`
+}
