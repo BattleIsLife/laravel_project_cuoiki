@@ -9,6 +9,7 @@ use App\Http\Controllers\FictionController;
 use App\Http\Controllers\Author\AuthorFictionController;
 use App\Http\Controllers\Author\AuthorChapterController;
 use App\Http\Controllers\ChapterController;
+use App\Http\Controllers\InteractionController;
 use App\Http\Controllers\SeriesController;
 use Illuminate\Support\Facades\Route;
 
@@ -39,6 +40,15 @@ Route::controller(SeriesController::class)->group(function(){
 
 // Route xử lý chương
 Route::get('/chapter/{chapterId}', [ChapterController::class, 'show']);
+
+
+// Route xử lý tương tác AJAX: like truyện/chương, vote bình luận
+Route::controller(InteractionController::class)->middleware('check.user.login')->group(function () {
+    Route::post('/fiction/{fictionId}/like', 'toggleFictionLike')->name('fiction.like');
+    Route::post('/chapter/{chapterId}/like', 'toggleChapterLike')->name('chapter.like');
+    Route::post('/chapter-comments/{commentId}/vote', 'voteChapterComment')->name('chapter-comments.vote');
+    Route::post('/moderator-post-comments/{commentId}/vote', 'voteModeratorPostComment')->name('moderator-post-comments.vote');
+});
 
 
 // Route xử lý đăng nhập, đăng ký user
