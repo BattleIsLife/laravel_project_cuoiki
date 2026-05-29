@@ -24,12 +24,16 @@ class ChapterController extends Controller
 
         // Bình luận gốc của chương (phân trang 15 cái/trang)
         $comments = ChapterComment::with('user')
+            ->with('child_comment', function ($child_cmt) {
+                $child_cmt->withSum('upvote_history as total_score', 'count')->latest()->paginate(10);
+            })
+            ->withSum('upvote_history as total_score', 'count')
             ->where('chapter_id', $chapterId)
             ->whereNull('parent_comment')
-            ->orderByDesc('created_at')
+            ->latest()
             ->paginate(15);
 
-        // Tăng lượt xem nếu người click vào không phải là chủ truyện hoặc
+        // Tăng lượt xem nếu người click vào không phải là chủ truyện hoặc đã đăng nhập user
         $user = Auth::guard('web')->user();
 
         if($user)
