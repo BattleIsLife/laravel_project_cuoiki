@@ -10,6 +10,7 @@ use App\Http\Controllers\Author\AuthorFictionController;
 use App\Http\Controllers\Author\AuthorChapterController;
 use App\Http\Controllers\ChapterController;
 use App\Http\Controllers\InteractionController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\SeriesController;
 use Illuminate\Support\Facades\Route;
 
@@ -48,6 +49,13 @@ Route::controller(InteractionController::class)->middleware('check.user.login')-
     Route::post('/chapter/{chapterId}/like', 'toggleChapterLike')->name('chapter.like');
     Route::post('/chapter_comments/{commentId}/vote', 'voteChapterComment')->name('chapter_comments.vote');
     Route::post('/moderator_post_comments/{commentId}/vote', 'voteModeratorPostComment')->name('moderator_post_comments.vote');
+});
+
+Route::controller(CommentController::class)->middleware('check.user.login')->group(function () {
+    Route::post('/chapter/{chapterId}/comments', 'storeChapterComment')->name('chapter_comments.store');
+    Route::delete('/chapter_comments/{commentId}', 'deleteChapterComment')->name('chapter_comments.delete');
+    Route::post('/moderator_posts/{postId}/comments', 'storeModeratorPostComment')->name('moderator_post_comments.store');
+    Route::delete('/moderator_post_comments/{commentId}', 'deleteModeratorPostComment')->name('moderator_post_comments.delete');
 });
 
 
