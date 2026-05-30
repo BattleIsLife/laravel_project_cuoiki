@@ -11,6 +11,7 @@ use App\Http\Controllers\Author\AuthorChapterController;
 use App\Http\Controllers\ChapterController;
 use App\Http\Controllers\InteractionController;
 use App\Http\Controllers\SeriesController;
+use App\Http\Controllers\TestCommentController;
 use Illuminate\Support\Facades\Route;
 
 Route::controller(HomeController::class)->group(function(){
@@ -48,6 +49,13 @@ Route::controller(InteractionController::class)->middleware('check.user.login')-
     Route::post('/chapter/{chapterId}/like', 'toggleChapterLike')->name('chapter.like');
     Route::post('/chapter_comments/{commentId}/vote', 'voteChapterComment')->name('chapter_comments.vote');
     Route::post('/moderator_post_comments/{commentId}/vote', 'voteModeratorPostComment')->name('moderator_post_comments.vote');
+});
+
+// Test nút bình luận
+Route::controller(TestCommentController::class)->middleware('check.user.login')->group(function(){
+    // Chapter comment
+    Route::post('/chapter/{chapterId}/new_comment', 'new_comment');
+    Route::post('/comment/{commentId}/new_child_comment', 'new_child_comment');
 });
 
 
