@@ -91,12 +91,12 @@ function reply_comment(btn, comment_id)
         <textarea class="form-control" rows="4"></textarea>
         <div class="d-flex flex-row">
             <button type="button" class="btn btn-success mt-3">Đăng tải bình luận</button>
-            <button type="button" class="btn btn-danger mt-3" onclick="revert_back(this)">Hủy</button>
+            <button type="button" class="btn btn-danger mt-3" onclick="revert_back(this, '${comment_id}')">Hủy</button>
         </div>
     `;
 }
 
-function revert_back(btn) {
+function revert_back(btn, comment_id) {
     const parent = btn.closest('div').parentElement;
-    parent.innerHTML = `<button class="btn btn-primary" onclick="reply_comment(this, '{{ $comment->id }}')">Phản hồi bình luận</button>`
+    parent.innerHTML = `<button class="btn btn-primary" onclick="reply_comment(this, '${comment_id}')">Phản hồi bình luận</button>`
 }
