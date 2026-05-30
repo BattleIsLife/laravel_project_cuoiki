@@ -16,7 +16,7 @@
         <h4>Viết bình luận ở đây</h4>
         <input type="hidden" name="chapter_id" value=""> <!-- ID chapter hiện tại -->
         <textarea class="form-control" rows="4" id="comment_content" name="comment_content" @if (!$user) disabled @endif></textarea>
-        <p><small>Lời nói của bạn có trọng lượng. Hãy cẩn thận nếu không là ăn ban</small></p>
+        <p><small>Lời nói của bạn có trọng lượng. Hãy cẩn thận nếu không là TÙ NGAY</small></p>
         <button type="submit" class="btn btn-success mt-3" name="add_comment" @if (!$user) disabled @endif >Đăng tải bình luận</button>
     </form>
 
@@ -26,33 +26,33 @@
     <!-- Bình luận -->
     <div id="commentsList">
         @forelse ($comments as $comment)
-            <div class="container-sm mt-2 p-3 border">
+            <div class="container-sm mt-2 p-3 border comment-box">
                 <div class="border-bottom mb-2">
                     <h6>{{ $comment->user->username }}</h6>
                     <p><i>{{ $comment->created_at }}</i></p>
-                    <p>Tổng điểm: {{ $comment->total_score ?? 0 }}</p>
+                    <p>Tổng điểm: <span class="total-score">{{ $comment->total_score ?? 0 }}</span></p>
                 </div>
                 <textarea class="form-control" disabled readonly required rows="6" >{{ $comment->content }}</textarea>
                 @if ($user)
                     <div class="mt-2 reply_comment"><button class="btn btn-primary" onclick="reply_comment(this, '{{ $comment->id }}')">Phản hồi bình luận</button></div>
                     <div class="d-flex flex-row mt-2">
-                        <p><button class="btn btn-success" data-id={{ $comment->id }} onclick="upvote_comment(this, 1)">Upvote</button></p>
-                        <p><button class="btn btn-danger" data-id={{ $comment->id }} onclick="upvote_comment(this, -1)">Downvote</button></p>
+                        <button class="btn btn-success" data-id={{ $comment->id }} onclick="upvote_comment(this, 1)">Upvote</button>
+                        <button class="btn btn-danger" data-id={{ $comment->id }} onclick="upvote_comment(this, -1)">Downvote</button>
                     </div>
                 @endif
             </div>
             @forelse ($comment->child_comment as $comment)
-                <div class="container-sm mt-2 p-3 ps-5 border">
+                <div class="container-sm mt-2 p-3 ps-5 border comment-box">
                     <div class="border-bottom mb-2">
                         <h6>{{ $comment->user->username }}</h6>
                         <p><i>{{ $comment->created_at }}</i></p>
-                        <p>Tổng điểm: {{ $comment->total_score ?? 0}}</p>
+                        <p>Tổng điểm: <span class="total-score">{{ $comment->total_score ?? 0}}</span></p>
                     </div>
                     <textarea class="form-control" disabled readonly required rows="6" >{{ $comment->content }}</textarea>
                     @if ($user)
                         <div class="d-flex flex-row mt-2">
-                            <p><button class="btn btn-success" data-id={{ $comment->id }} onclick="upvote_comment(this, 1)">Upvote</button></p>
-                            <p><button class="btn btn-danger" data-id={{ $comment->id }} onclick="upvote_comment(this, -1)">Downvote</button></p>
+                            <button class="btn btn-success" data-id={{ $comment->id }} onclick="upvote_comment(this, 1)">Upvote</button>
+                            <button class="btn btn-danger" data-id={{ $comment->id }} onclick="upvote_comment(this, -1)">Downvote</button>
                         </div>
                     @endif
                 </div>
@@ -68,6 +68,10 @@
     </div>
 </div>
 
+<script>
+    const BASE_URL = "{{ url('') }}";
+    const CSRF_TOKEN = "{{ csrf_token() }}"
+</script>
 <script src="{{ @asset('js/add_comment.js') }}"></script>
 <script src="{{ @asset('js/interactions/upvote_comment.js') }}"></script>
 
