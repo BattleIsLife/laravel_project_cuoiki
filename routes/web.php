@@ -46,8 +46,8 @@ Route::get('/chapter/{chapterId}', [ChapterController::class, 'show']);
 Route::controller(InteractionController::class)->middleware('check.user.login')->group(function () {
     Route::post('/fiction/{fictionId}/like', 'toggleFictionLike')->name('fiction.like');
     Route::post('/chapter/{chapterId}/like', 'toggleChapterLike')->name('chapter.like');
-    Route::post('/chapter-comments/{commentId}/vote', 'voteChapterComment')->name('chapter-comments.vote');
-    Route::post('/moderator-post-comments/{commentId}/vote', 'voteModeratorPostComment')->name('moderator-post-comments.vote');
+    Route::post('/chapter_comments/{commentId}/vote', 'voteChapterComment')->name('chapter_comments.vote');
+    Route::post('/moderator_post_comments/{commentId}/vote', 'voteModeratorPostComment')->name('moderator_post_comments.vote');
 });
 
 
