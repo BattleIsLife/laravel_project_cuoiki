@@ -16,8 +16,8 @@ async function upvote_comment(btn, value) {
         body: JSON.stringify(payload)
     });
 
-    const parent_div = btn.parentElement;
-    const all_btn = parent_div.children;
+    const parent_div = btn.parentElement.parentElement;
+    const all_btn = parent_div.querySelectorAll('button');
 
     for (let i = 0; i < all_btn.length; i++) {
         const button = all_btn[i];
