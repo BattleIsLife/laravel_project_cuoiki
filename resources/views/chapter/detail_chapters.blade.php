@@ -1,6 +1,7 @@
 @extends('main')
 @section('content')
 @php
+    $moderator = auth()->guard('moderator')->user();
     $user = auth()->guard('web')->user();
 @endphp
 <div class="container-sm mt-3 p-4">
@@ -14,7 +15,7 @@
     <form class="mb-3 border p-4" id="commentForm">
         <h4>Viết bình luận ở đây</h4>
         @if (!$user) <p>Vui lòng đăng nhập để bình luận</p> @endif
-        <textarea class="form-control" rows="4" id="comment_content" name="comment_content" @if (!$user) disabled @endif></textarea>
+        <textarea class="form-control" rows="4" id="comment_content" name="content" @if (!$user) disabled @endif></textarea>
         <p><small>Lời nói của bạn có trọng lượng. Hãy cẩn thận nếu không là TÙ NGAY</small></p>
         <button type="submit" class="btn btn-success mt-3" id="submit_comment" @if (!$user) disabled @endif >Đăng tải bình luận</button>
     </form>
@@ -25,7 +26,7 @@
     <!-- Bình luận -->
     <div id="commentsList">
         @forelse ($comments as $comment)
-            <div class="container-sm mt-2 p-3 border main-comment-wrapper comment-box">
+            <div class="container-sm mt-2 p-3 border main-comment-wrapper comment-box" data-id="{{ $comment->id }}">
                 <div class="border-bottom mb-2">
                     <h6>{{ $comment->user->username }}</h6>
                     <p><i>{{ $comment->created_at }}</i></p>
@@ -37,11 +38,21 @@
                     <div class="d-flex flex-row mt-2">
                         <button class="btn btn-success" data-id="{{ $comment->id }}" onclick="upvote_comment(this, 1)">Upvote</button>
                         <button class="btn btn-danger" data-id="{{ $comment->id }}" onclick="upvote_comment(this, -1)">Downvote</button>
+                        @if ($user->id === $comment->user_id)
+                            <button class="btn btn-secondary" 
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#userDeleteCommentModal"
+                                    data-id="{{ $comment->id }}"
+                                    onclick="user_delete_comment(this)">
+                                    Gỡ bình luận
+                            </button>
+                        @endif
                     </div>
                 @endif
+
                 <div class="child_comment_list">
                     @foreach ($comment->child_comment as $child)
-                        <div class="container-sm mt-2 p-3 ps-5 border comment-box">
+                        <div class="container-sm mt-2 p-3 ps-5 border comment-box" data-id="{{ $child->id }}">
                             <div class="border-bottom mb-2">
                                 <h6>{{ $child->user->username }}</h6>
                                 <p><i>{{ $child->created_at }}</i></p>
@@ -52,10 +63,22 @@
                                 <div class="d-flex flex-row mt-2">
                                     <button class="btn btn-success" data-id="{{ $child->id }}" onclick="upvote_comment(this, 1)">Upvote</button>
                                     <button class="btn btn-danger" data-id="{{ $child->id }}" onclick="upvote_comment(this, -1)">Downvote</button>
+                                    @if ($user->id === $comment->user_id)
+                                        <button class="btn btn-secondary" 
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#userDeleteCommentModal" 
+                                                data-id="{{ $child->id }}"
+                                                onclick="user_delete_comment(this)">
+                                                Gỡ bình luận
+                                        </button>
+                                    @endif
                                 </div>
                             @endif
                         </div>
                     @endforeach
+                    {{-- <div class="d-flex justify-content-center mt-4">
+                        {{ $comment->child_comment->links('pagination::bootstrap-5') }}
+                    </div> --}}
                 </div>
             </div>
         @empty
@@ -67,12 +90,41 @@
     </div>
 </div>
 
+@if ($user)
+    <!-- Modal Xóa Comment người dùng -->
+    <div class="modal" id="userDeleteCommentModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Xác nhận muốn xóa bình luận này?</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                Hành động này sẽ không thể đảo ngược...hãy suy nghĩ thật kỹ
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" id="user_confirm_delete_comment" onclick="user_confirm_delete_comment(this)">Xác nhận xóa</button>
+                <button type="button" class="btn btn-success" id="close_user_delete_comment_modal" data-bs-dismiss="modal" onclick="user_close_button(this)">Close</button>
+            </div>
+
+            </div>
+        </div>
+    </div>
+@endif
+
 <script>
     const BASE_URL = "{{ url('') }}";
     const CSRF_TOKEN = "{{ csrf_token() }}"
     const CHAPTER_ID = "{{ $chapter->id }}";
 </script>
 <script src="{{ @asset('js/add_chapter_comment.js') }}"></script>
+<script src="{{ @asset('js/delete_chapter_comment.js') }}"></script>
 <script src="{{ @asset('js/interactions/upvote_comment.js') }}"></script>
 
 @endsection
