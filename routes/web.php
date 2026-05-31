@@ -10,6 +10,7 @@ use App\Http\Controllers\Author\AuthorFictionController;
 use App\Http\Controllers\Author\AuthorChapterController;
 use App\Http\Controllers\ChapterController;
 use App\Http\Controllers\InteractionController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\SeriesController;
 use App\Http\Controllers\TestCommentController;
 use Illuminate\Support\Facades\Route;
@@ -51,11 +52,11 @@ Route::controller(InteractionController::class)->middleware('check.user.login')-
     Route::post('/moderator_post_comments/{commentId}/vote', 'voteModeratorPostComment')->name('moderator_post_comments.vote');
 });
 
-// Test nút bình luận
-Route::controller(TestCommentController::class)->middleware('check.user.login')->group(function(){
-    // Chapter comment
-    Route::post('/chapter/{chapterId}/new_comment', 'new_comment');
-    Route::post('/comment/{commentId}/new_child_comment', 'new_child_comment');
+Route::controller(CommentController::class)->middleware('check.user.login')->group(function () {
+    Route::post('/chapter/{chapterId}/comments', 'storeChapterComment')->name('chapter_comments.store');
+    Route::delete('/chapter_comments/{commentId}', 'deleteChapterComment')->name('chapter_comments.delete');
+    Route::post('/moderator_posts/{postId}/comments', 'storeModeratorPostComment')->name('moderator_post_comments.store');
+    Route::delete('/moderator_post_comments/{commentId}', 'deleteModeratorPostComment')->name('moderator_post_comments.delete');
 });
 
 
