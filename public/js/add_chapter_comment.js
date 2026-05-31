@@ -12,7 +12,13 @@ document.getElementById('commentForm').addEventListener('submit', async function
         return;
     }
 
-    const response = await fetch(`${BASE_URL}/chapter/${CHAPTER_ID}/new_comment`, {
+    if(commentText.length > 5000)
+    {
+        alert('Bình luận không được quá 5000 ký tự');
+        return;   
+    }
+
+    const response = await fetch(`${BASE_URL}/chapter/${CHAPTER_ID}/comments`, {
         method: 'POST',
         headers: {
             'X-CSRF-TOKEN': CSRF_TOKEN,
@@ -33,7 +39,7 @@ document.getElementById('commentForm').addEventListener('submit', async function
 
     submitComment.disabled = false;
     commentContent.value = "";
-    addCommentToList(data);
+    addCommentToList(data.comment);
 });
 
 
@@ -42,7 +48,7 @@ function addCommentToList(comment) {
     const list = document.getElementById('commentsList');
     const message = document.getElementById('no_comment_message');
     const commentHtml = `
-        <div class="container-sm mt-2 p-3 border main-comment-wrapper comment-box">
+        <div class="container-sm mt-2 p-3 border main-comment-wrapper comment-box" data-id="${comment.id}">
             <div class="border-bottom mb-2">
                 <h6>${comment.username}</h6>
                 <p><i>${comment.created_at}</i></p>
@@ -53,6 +59,13 @@ function addCommentToList(comment) {
             <div class="d-flex flex-row mt-2">
                 <button class="btn btn-success" data-id="${comment.id}" onclick="upvote_comment(this, 1)">Upvote</button>
                 <button class="btn btn-danger" data-id="${comment.id}" onclick="upvote_comment(this, -1)">Downvote</button>
+                <button class="btn btn-secondary" 
+                        data-bs-toggle="modal"
+                        data-bs-target="#userDeleteCommentModal" 
+                        data-id="${comment.id}" 
+                        onclick="user_delete_comment(this)">
+                        Gỡ bình luận
+                </button>
             </div>
             <div class="child_comment_list">
 
@@ -95,19 +108,27 @@ async function add_child_to_comment(btn, comment_id) {
     // alert('Not implimented');
     const div_container = btn.closest('div.reply_comment');
     const comment_content = div_container.querySelector('.comment_content');
+    const commentText = comment_content.value;
 
-    if (comment_content.value.trim() === '')
+    if (commentText.trim() === '')
     {
         alert('Vui lòng nhập nội dung bình luận');
         return;
     }
 
+    if(commentText.length > 5000)
+    {
+        alert('Bình luận không được quá 5000 ký tự');
+        return;   
+    }
+
     // data gửi đi lên server
     const payload = {
-        content: comment_content.value
+        parent_comment: comment_id,
+        content: commentText
     };
 
-    const response = await fetch(`${BASE_URL}/comment/${comment_id}/new_child_comment`, {
+    const response = await fetch(`${BASE_URL}/chapter/${CHAPTER_ID}/comments`, {
         method: 'POST',
         headers: {
             'X-CSRF-TOKEN': CSRF_TOKEN,
@@ -136,19 +157,28 @@ async function add_child_to_comment(btn, comment_id) {
         element.disabled = false;
     }
 
+    const comment = data.comment;
+
     // Thêm bình luận con ở đầu danh sách
     const list = parent_div.querySelector('div.child_comment_list');
     const commentHtml = `
-        <div class="container-sm mt-2 p-3 ps-5 border comment-box">
+        <div class="container-sm mt-2 p-3 ps-5 border comment-box" data-id="${comment.id}">
             <div class="border-bottom mb-2">
-                <h6>${data.username}</h6>
-                <p><i>${data.created_at}</i></p>
+                <h6>${comment.username}</h6>
+                <p><i>${comment.created_at}</i></p>
                 <p>Tổng điểm: <span class="total-score">0</span></p>
             </div>
-            <textarea class="form-control" disabled readonly required rows="6" >${data.content}</textarea>
+            <textarea class="form-control" disabled readonly required rows="6" >${comment.content}</textarea>
             <div class="d-flex flex-row mt-2">
-                <button class="btn btn-success" data-id="${data.id}" onclick="upvote_comment(this, 1)">Upvote</button>
-                <button class="btn btn-danger" data-id="${data.id}" onclick="upvote_comment(this, -1)">Downvote</button>
+                <button class="btn btn-success" data-id="${comment.id}" onclick="upvote_comment(this, 1)">Upvote</button>
+                <button class="btn btn-danger" data-id="${comment.id}" onclick="upvote_comment(this, -1)">Downvote</button>
+                <button class="btn btn-secondary" 
+                        data-bs-toggle="modal"
+                        data-bs-target="#userDeleteCommentModal" 
+                        data-id="${comment.id}"
+                        onclick="user_delete_comment(this)">
+                        Gỡ bình luận
+                </button>
             </div>
         </div>
     `;
