@@ -23,13 +23,13 @@
                 {{-- Chỉ user moderator --}}
                 @if ($permission === 'user_moderator')
                     <li class="nav-item">
-                        <a class="nav-link" href="">Danh sách truyện</a>
+                        <a class="nav-link" href="{{ route('admin.fiction_list') }}">Danh sách truyện</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="">Danh sách series</a>
+                        <a class="nav-link" href="{{ route('admin.series_list') }}">Danh sách series</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="">Danh sách người dùng</a>
+                        <a class="nav-link" href="{{ route('admin.user_list') }}">Danh sách người dùng</a>
                     </li>
                 @endif
 
@@ -43,7 +43,7 @@
                 {{-- Chỉ admin --}}
                 @if ($permission === 'admin')
                     <li class="nav-item mt-3">
-                        <a class="nav-link bg-secondary text-white" href="">Danh sách quản trị viên</a>
+                        <a class="nav-link bg-secondary text-white" href="{{ route('admin.moderator_list') }}">Danh sách quản trị viên</a>
                     </li>
                 @endif
                 
