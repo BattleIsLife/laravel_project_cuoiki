@@ -36,7 +36,7 @@
                 {{-- Chỉ post moderator --}}
                 @if ($permission === 'post_moderator')
                     <li class="nav-item">
-                        <a class="nav-link" href="">Danh sách bài đăng</a>
+                        <a class="nav-link" href="{{ route('admin.post_list') }}">Danh sách bài đăng</a>
                     </li>
                 @endif
 
@@ -44,6 +44,10 @@
                 @if ($permission === 'admin')
                     <li class="nav-item mt-3">
                         <a class="nav-link bg-secondary text-white" href="{{ route('admin.moderator_list') }}">Danh sách quản trị viên</a>
+                    </li>
+
+                    <li class="nav-item mt-3">
+                        <a class="nav-link bg-secondary text-white" href="{{ route('admin.register') }}">Tạo quản trị viên mới</a>
                     </li>
                 @endif
                 
