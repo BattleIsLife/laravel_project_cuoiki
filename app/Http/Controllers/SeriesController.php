@@ -34,11 +34,7 @@ class SeriesController extends Controller
 
     public function show(string $seriesId)
     {
-        $series = Series::whereHas('fictions', function ($fiction) {
-                $fiction->whereHas('chapters', function ($chapter) {
-                    $chapter->where('is_posted', '=', 1);
-                });
-            })
+        $series = Series::whereHas('fictions')
             ->findOrFail($seriesId);
 
         $fictions = $series->fictions()->whereHas('chapters', function ($chapter) {
