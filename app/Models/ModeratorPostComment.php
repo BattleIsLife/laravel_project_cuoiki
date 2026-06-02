@@ -33,4 +33,9 @@ class ModeratorPostComment extends Model
     {
         return $this->hasMany(UpvoteModeratorPostCommentHistory::class, 'comment_id');
     }
+
+    public function child_comment()
+    {
+        return $this->hasMany(ModeratorPostComment::class, 'parent_comment');
+    }
 }
