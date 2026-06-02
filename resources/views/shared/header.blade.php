@@ -45,8 +45,8 @@
 
                     {{-- Sau khi đăng nhập moderator --}}
                     @elseif($moderator)
-                        <a class="nav-link" href="">Dashboard</a>
-                        <a class="nav-link" href="">{{ auth()->guard('moderator')->user()->username }}</a>
+                        <a class="nav-link" href="{{ route('admin.dashboard') }}">Dashboard</a>
+                        <a class="nav-link" href="{{ route('admin.dashboard') }}">{{ auth()->guard('moderator')->user()->username }}</a>
                         <a href="{{ route('admin.logout') }}" class="nav-link fw-bold text-danger" 
                             onclick="event.preventDefault(); document.getElementById('moderator-logout-form').submit();">
                             Đăng xuất
