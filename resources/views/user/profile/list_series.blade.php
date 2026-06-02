@@ -1,4 +1,8 @@
 @extends('user.profile')
+@section('title')
+    Series của tôi
+@endsection
+
 @section('user_profile_component')
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <link rel="stylesheet" href="{{ @asset('css/series_list.css') }}">

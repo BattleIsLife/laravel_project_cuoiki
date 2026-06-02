@@ -1,5 +1,8 @@
 @extends('main')
 @section('content')
+@section('title')
+    Xóa tài khoản
+@endsection
 @php
     $user = auth()->guard('web')->user();
 @endphp

@@ -1,4 +1,7 @@
 @extends('user.profile')
+@section('title')
+    Thông tin người dùng
+@endsection
 @section('user_profile_component')
 <div class="text-center">
     <h2>Thông tin tài khoản</h2>

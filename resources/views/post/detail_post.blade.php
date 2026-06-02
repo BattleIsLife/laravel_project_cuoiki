@@ -1,4 +1,7 @@
 @extends('main')
+@section('title')
+    Bài đăng - {{ $post->name }}
+@endsection
 @section('content')
 @php
     $moderator = auth()->guard('moderator')->user();

@@ -1,4 +1,7 @@
 @extends('admin.profile')
+@section('title')
+    Quản lý series
+@endsection
 @section('moderator_profile_component')
 <link rel="stylesheet" href="{{ @asset('css/series_list.css') }}">
 <h2 class="text-center">Danh sách series</h2>

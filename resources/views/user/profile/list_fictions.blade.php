@@ -1,4 +1,9 @@
 @extends('user.profile')
+
+@section('title')
+    Truyện của tôi
+@endsection
+
 @section('user_profile_component')
 <link rel="stylesheet" href="{{ @asset('css/fiction_list.css') }}">
 <h2 class="text-center">Danh sách truyện</h2>

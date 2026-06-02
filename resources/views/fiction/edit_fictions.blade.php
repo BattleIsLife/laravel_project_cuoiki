@@ -1,4 +1,7 @@
 @extends('main')
+@section('title')
+    Chỉnh sửa truyện - {{ $fiction->fiction_name }}
+@endsection
 @section('content')
 
 <div class="container-fluid">

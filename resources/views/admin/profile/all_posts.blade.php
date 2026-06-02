@@ -1,4 +1,7 @@
 @extends('admin.profile')
+@section('title')
+    Quản lý bài đăng
+@endsection
 @section('moderator_profile_component')
 @php
     $moderator = auth()->guard('moderator')->user()

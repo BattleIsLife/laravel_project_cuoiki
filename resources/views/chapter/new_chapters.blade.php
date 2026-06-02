@@ -1,4 +1,7 @@
 @extends('main')
+@section('title')
+    Thêm chương mới
+@endsection
 @section('content')
 <!-- Stylesheet for quilljs -->
 <link href="{{ @asset('css/quill/quill_snow.css') }}" rel="stylesheet" />

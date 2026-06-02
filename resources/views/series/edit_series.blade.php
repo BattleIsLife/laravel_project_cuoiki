@@ -1,5 +1,9 @@
 @extends('main')
 @section('content')
+@section('title')
+    Chỉnh sửa series - {{ $series->series_name }}
+@endsection
+
 <ul class="nav nav-tabs justify-content-center">
     <li class="nav-item">
         <a class="nav-link active" data-bs-toggle="tab" href="#edit_series_info">Thông tin series</a>

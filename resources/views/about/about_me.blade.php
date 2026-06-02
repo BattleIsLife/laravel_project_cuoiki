@@ -1,4 +1,7 @@
 @extends('main')
+@section('title')
+    About us
+@endsection
 @section('content')
 <div class="container-sm p-4">
     <p>Họ và tên nhóm trưởng: Trần Tuấn Đạt</p>

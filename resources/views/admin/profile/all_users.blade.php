@@ -1,4 +1,7 @@
 @extends('admin.profile')
+@section('title')
+    Quản lý người dùng
+@endsection
 @section('moderator_profile_component')
 <div class="text-center">
     <h2>Danh sách người dùng</h2>

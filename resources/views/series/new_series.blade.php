@@ -1,5 +1,8 @@
 @extends('main')
 @section('content')
+@section('title')
+    Tạo series mới
+@endsection
 <div class="container-fluid p-4 mt-3">
     <div class="row">
         <div class="col-sm-3 d-flex mt-2 justify-content-center">

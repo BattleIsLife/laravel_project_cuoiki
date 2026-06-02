@@ -1,4 +1,7 @@
 @extends('admin.profile')
+@section('title')
+    Thông tin tài khoản
+@endsection
 @section('moderator_profile_component')
 @php
     // Tính toán quyền hạn

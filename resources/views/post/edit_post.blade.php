@@ -1,4 +1,7 @@
 @extends('main')
+@section('title')
+    Chỉnh sửa bài đăng - $post->title
+@endsection
 @section('content')
 <div class="container-fluid p-4 mt-3">
     <div class="container-sm card p-4 mt-2">

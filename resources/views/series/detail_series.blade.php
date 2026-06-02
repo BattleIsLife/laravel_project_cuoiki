@@ -1,5 +1,8 @@
 @extends('main')
 @section('content')
+@section('title')
+    Series - {{ $series->series_name }}
+@endsection
 @php
     $moderator = auth()->guard('moderator')->user();
     $user =  auth()->guard('web')->user();
@@ -22,7 +25,7 @@
             <div class="row">
                 <div class="col-sm-3 d-flex mt-2 justify-content-center">
                     <div id="imagePreview" class="" style="width: 162px; height: 255px; background-color: gray;">
-                        <img id="previewImg" src="{{ @asset('storage/' . $series->image_link) }}" alt="" class="img-fluid rounded" style="width: inherit; height: inherit;">
+                        <img id="previewImg" src="{{ @asset('storage/' . $series->image_link) }}" alt="" class="img-fluid rounded" style="width: inherit; height: inherit; object-fit: cover;">
                     </div>
                 </div>
 

@@ -1,5 +1,8 @@
 @extends('main')
 @section('content')
+@section('title')
+    Đọc truyện - {{ $fiction->fiction_name }}
+@endsection
 @php
     $moderator = auth()->guard('moderator')->user();
     $user =  auth()->guard('web')->user();

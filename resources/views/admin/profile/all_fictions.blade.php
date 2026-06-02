@@ -1,4 +1,7 @@
 @extends('admin.profile')
+@section('title')
+    Quản lý truyện
+@endsection
 @section('moderator_profile_component')
 <link rel="stylesheet" href="{{ @asset('css/fiction_list.css') }}">
 <h2 class="text-center">Danh sách truyện</h2>

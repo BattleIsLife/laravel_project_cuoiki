@@ -1,4 +1,7 @@
 @extends('main')
+@section('title')
+    Thêm truyện mới
+@endsection
 @section('content')
 <div class="container-fluid p-4 mt-3">
     <div class="row">

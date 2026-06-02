@@ -1,5 +1,7 @@
 @extends('main')
-
+@section('title')
+    Các truyện mới nhất
+@endsection
 @section('content')
 <link rel="stylesheet" href="{{ @asset('css/all_fiction_series.css') }}">
 <style>
