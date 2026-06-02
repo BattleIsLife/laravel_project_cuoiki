@@ -21,16 +21,16 @@ class ModeratorPostComment extends Model
 
     public function post()
     {
-        $this->belongsTo(ModeratorPost::class, 'post_id');
+        return $this->belongsTo(ModeratorPost::class, 'post_id');
     }
 
     public function user()
     {
-        $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function upvote_history()
     {
-        $this->hasMany(UpvoteModeratorPostCommentHistory::class, 'comment_id');
+        return $this->hasMany(UpvoteModeratorPostCommentHistory::class, 'comment_id');
     }
 }
