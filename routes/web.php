@@ -12,7 +12,7 @@ use App\Http\Controllers\ChapterController;
 use App\Http\Controllers\InteractionController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\SeriesController;
-use App\Http\Controllers\TestCommentController;
+use App\Http\Controllers\Moderator\ManagmentController;
 use Illuminate\Support\Facades\Route;
 
 Route::controller(HomeController::class)->group(function(){
@@ -142,8 +142,61 @@ Route::prefix('admin')->group(function(){
     });
 
     Route::middleware('check.moderator.login')->group(function(){
-        Route::get('/dashboard', function(){
-            return view('admin.profile.dashboard');
-        })->name('admin.dashboard');
+        Route::controller(ManagmentController::class)->group(function(){
+            // Dashboard
+            Route::get('/dashboard', 'dashboard')->name('admin.dashboard');
+
+
+            // User moderator
+            // Userlist
+            Route::get('/user_list', 'user_list')->name('admin.user_list');
+            Route::put('/user_block/{user_id}', 'block_user');
+
+            // Fiction list
+            Route::get('/fiction_list', 'fiction_list')->name('admin.fiction_list');
+
+            // Series list
+            Route::get('/series_list', 'series_list')->name('admin.series_list');
+
+            // AJAX xóa
+            Route::delete('/delete_series/{series_id}', 'delete_series');
+            Route::delete('/delete_fiction/{fiction_id}', 'delete_fiction');
+            Route::delete('/delete_chapter/{chapter_id}', 'delete_chapter');
+            Route::delete('/delete_comment/{comment_id}', 'delete_comment');
+
+
+            // Moderator list (for admin)
+            Route::get('/moderator_list', 'moderator_list')->name('admin.moderator_list');
+            Route::put('/change_permission/{mod_id}', 'change_mod_permission');
+
+            // Tạo tài khoản moderator
+            Route::get('/register', 'showRegister')->name('admin.register');
+            Route::post('/register', 'register');
+
+            // Thay đổi thông tin
+            Route::get('/change_info', 'showChangeInfo')->name('admin.change_info');
+            Route::put('/change_info', 'change_info');
+        });
+
+
+        // Post moderator (để lúc nào xong thì sửa lại route)
+        // Route::controller(PostController::class)->group(function(){
+        //     // Danh sách bài đăng
+        //     Route::get('/post_list', 'showAllPost')->name('admin.post_list');
+
+        //     // Thêm bài đăng mói
+        //     Route::get('/new_post', 'showNewPost')->name('admin.new_post');
+        //     Route::post('/new_post', 'new_post');
+
+        //     // Sửa bài đăng
+        //     Route::get('/edit_post/{post_id}', 'showEditPost')->name('admin.edit_post');
+        //     Route::post('/edit_post/{post_id}', 'edit_post');
+
+        //     // Xóa bài đăng
+        //     Route::delete('/delete_post/{post_id}', 'delete_post');
+
+        //     // Xóa comment bài đăng
+        //     Route::delete('/delete_post_comment/{comment_id}', 'delete_post_comment');
+        // });
     });
 });
