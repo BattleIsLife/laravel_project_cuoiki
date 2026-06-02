@@ -33,6 +33,17 @@
                     <p>Tổng điểm: <span class="total-score">{{ $comment->total_score ?? 0 }}</span></p>
                 </div>
                 <textarea class="form-control" disabled readonly required rows="6" >{{ $comment->content }}</textarea>
+                @if($moderator && $moderator->permission == 'user_moderator')
+                    <div class="mt-2">
+                        <a class="btn btn-danger delete-btn" style="width: fit-content; height: fit-content;" 
+                        data-bs-toggle="modal"
+                        data-bs-target="#moderatorDeleteCommentModal"
+                        data-id="{{ $comment->id }}"
+                        onclick="moderator_delete_comment(this)">
+                            Xóa bình luận
+                        </a>
+                    </div>
+                @endif
                 @if ($user)
                     <div class="mt-2 reply_comment"><button class="btn btn-primary" onclick="reply_comment(this, '{{ $comment->id }}')">Phản hồi bình luận</button></div>
                     <div class="d-flex flex-row mt-2">
@@ -59,6 +70,17 @@
                                 <p>Tổng điểm: <span class="total-score">{{ $child->total_score ?? 0}}</span></p>
                             </div>
                             <textarea class="form-control" disabled readonly required rows="6" >{{ $child->content }}</textarea>
+                            @if($moderator && $moderator->permission == 'user_moderator')
+                                <div class="mt-2">
+                                    <a class="btn btn-danger delete-btn" style="width: fit-content; height: fit-content;" 
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#moderatorDeleteCommentModal"
+                                    data-id="{{ $child->id }}"
+                                    onclick="moderator_delete_comment(this)">
+                                        Xóa bình luận
+                                    </a>
+                                </div>
+                            @endif
                             @if ($user)
                                 <div class="d-flex flex-row mt-2">
                                     <button class="btn btn-success" data-id="{{ $child->id }}" onclick="upvote_comment(this, 1)">Upvote</button>
@@ -71,6 +93,18 @@
                                                 onclick="user_delete_comment(this)">
                                                 Gỡ bình luận
                                         </button>
+                                    @endif
+                                    @if($moderator && $moderator->permission == 'user_moderator')
+                                        <div>
+                                            <a class="btn btn-danger delete-btn" style="width: fit-content; height: fit-content;" 
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#moderatorDeleteModal"
+                                            data-id="{{ $chapter->id }}"
+                                            data-name="{{ $chapter->chapter_name }}"
+                                            onclick="get_delete_id(this)">
+                                                Xóa bình luận
+                                            </a>
+                                        </div>
                                     @endif
                                 </div>
                             @endif
@@ -118,6 +152,34 @@
     </div>
 @endif
 
+@if($moderator && $moderator->permission == 'user_moderator')
+    <!-- Modal Xóa Comment người dùng -->
+    <div class="modal" id="moderatorDeleteCommentModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Xác nhận muốn xóa bình luận này?</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                Hành động này sẽ không thể đảo ngược...hãy suy nghĩ thật kỹ
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" id="moderator_confirm_delete_comment" onclick="moderator_confirm_delete_comment(this)">Xác nhận xóa</button>
+                <button type="button" class="btn btn-success" id="close_moderator_delete_comment_modal" data-bs-dismiss="modal" onclick="moderator_close_button(this)">Close</button>
+            </div>
+
+            </div>
+        </div>
+    </div>
+@endif
+
 <script>
     const BASE_URL = "{{ url('') }}";
     const CSRF_TOKEN = "{{ csrf_token() }}"
@@ -125,6 +187,11 @@
 </script>
 <script src="{{ @asset('js/add_chapter_comment.js') }}"></script>
 <script src="{{ @asset('js/delete_chapter_comment.js') }}"></script>
+
+@if($moderator && $moderator->permission == 'user_moderator')
+    <script src="{{ @asset('js/moderator/delete_chapter_comment.js') }}"></script>
+@endif
+
 <script src="{{ @asset('js/interactions/upvote_comment.js') }}"></script>
 
 @endsection
