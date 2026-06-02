@@ -14,6 +14,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\SeriesController;
 use App\Http\Controllers\Moderator\ManagmentController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Moderator\PostController;
 
 Route::controller(HomeController::class)->group(function(){
     // Trang chủ
@@ -179,24 +180,15 @@ Route::prefix('admin')->group(function(){
         });
 
 
-        // Post moderator (để lúc nào xong thì sửa lại route)
-        // Route::controller(PostController::class)->group(function(){
-        //     // Danh sách bài đăng
-        //     Route::get('/post_list', 'showAllPost')->name('admin.post_list');
-
-        //     // Thêm bài đăng mói
-        //     Route::get('/new_post', 'showNewPost')->name('admin.new_post');
-        //     Route::post('/new_post', 'new_post');
-
-        //     // Sửa bài đăng
-        //     Route::get('/edit_post/{post_id}', 'showEditPost')->name('admin.edit_post');
-        //     Route::post('/edit_post/{post_id}', 'edit_post');
-
-        //     // Xóa bài đăng
-        //     Route::delete('/delete_post/{post_id}', 'delete_post');
-
-        //     // Xóa comment bài đăng
-        //     Route::delete('/delete_post_comment/{comment_id}', 'delete_post_comment');
-        // });
+       Route::controller(PostController::class)->group(function(){
+    Route::get('/post_list', 'showAllPost')->name('admin.post_list');
+    Route::get('/post/{post_id}', 'show')->name('admin.post_detail');
+    Route::get('/new_post', 'showNewPost')->name('admin.new_post');
+    Route::post('/new_post', 'new_post');
+    Route::get('/edit_post/{post_id}', 'showEditPost')->name('admin.edit_post');
+    Route::post('/edit_post/{post_id}', 'edit_post');
+    Route::delete('/delete_post/{post_id}', 'delete_post');
+    Route::delete('/delete_post_comment/{comment_id}', 'delete_post_comment');
+});
     });
 });
