@@ -63,7 +63,7 @@
             <h2 class="text-center">Mục lục chương</h2>
             <div class="d-flex flex-column">
                 @forelse ($chapters as $chapter)
-                    <div class="card p-3 mt-3">
+                    <div class="card p-3 mt-3 chapter">
                         <a href="{{ url('/chapter/' . $chapter->id) }}"><h5 class="mb-1">{{ $chapter->chapter_name }}</h5></a>
                         <p class="mb-0">Lượt xem: {{ $chapter->watch_count }}</p>
                         <p class="mb-0">Lượt thích: <span class="likeChapterCount">{{ $chapter->like_chapter_history_count }}</span></p>
@@ -83,8 +83,8 @@
                                 <a class="btn btn-danger delete-btn" style="width: fit-content; height: fit-content;" 
                                 data-bs-toggle="modal"
                                 data-bs-target="#deleteModal"
-                                data-id="{{ $fiction->id }}"
-                                data-name="{{ $fiction->fiction_name }}"
+                                data-id="{{ $chapter->id }}"
+                                data-name="{{ $chapter->chapter_name }}"
                                 onclick="get_delete_id(this)">
                                     Xóa chương
                                 </a>
@@ -102,10 +102,43 @@
         </div>
     </div>
 </div>
+
+{{-- For user moderator --}}
+@if($moderator && $moderator->permission == 'user_moderator')
+    <!-- The Modal -->
+    <div class="modal" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Xác nhận xóa <strong id="delete_stuff"></strong>?</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                Hành động này sẽ không thể đảo ngược...hãy suy nghĩ thật kỹ
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" id="confirm_delete_btn" onclick="confirm_delete(this)" class="btn btn-danger">Xác nhận xóa</button>
+                <button type="button" class="btn btn-success" id="btn-close-modal" data-bs-dismiss="modal">Close</button>
+            </div>
+
+            </div>
+        </div>
+    </div>
+@endif
 <script>
     const BASE_URL = "{{ url('') }}";
     const CSRF_TOKEN = "{{ csrf_token() }}";
 </script>
 <script src="{{ @asset('js/interactions/like.js') }}"></script>
+{{-- For user moderator --}}
+@if($moderator && $moderator->permission == 'user_moderator')
+    <script src="{{ @asset('js/moderator/delete_chapter.js') }}"></script>
+@endif
 
 @endsection
