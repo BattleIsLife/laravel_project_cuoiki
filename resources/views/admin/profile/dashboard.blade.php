@@ -67,7 +67,11 @@
 
 <div class="row">
     <div class="col-sm-6">
-        <p>Quyền hạn: <i>{{ $permission_name }}</i></p>
+        <p>Vai trò: <i>{{ $permission_name }}</i></p>
+    </div>
+
+    <div class="col-sm-6">
+        <p><a href="{{ route('admin.change_info') }}">Thay đổi thông tin</a></p>
     </div>
 </div>
 
