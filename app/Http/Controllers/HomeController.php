@@ -36,13 +36,14 @@ class HomeController extends Controller
                             ->get();
 
         // Top 5 bài viết mới nhất của moderator
-        // $moderatorPosts = \App\Models\ModeratorPost::with('moderator')
-        //     ->latest()
-        //     ->limit(5)
-        //     ->get();
+        $moderatorPosts = \App\Models\ModeratorPost::with('moderator')
+            ->latest()
+            ->limit(5)
+            ->get();
         $data = [
             'hotFictions' => $hotFictions,
-            'hotSeries'   => $hotSeries
+            'hotSeries'   => $hotSeries,
+            'posts'       => $moderatorPosts
         ];
 
         return view('user.home', $data);

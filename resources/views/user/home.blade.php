@@ -9,7 +9,18 @@
 <div class="container-fluid mt-5">
     <div class="container">
         <h3 class="text-center">Thông báo của moderator</h3>
-        <h5 class="text-center">Chưa có thông báo nào</h5>
+        @forelse ($posts as $post)
+            <div class="card p-3 mt-3 text-center">
+                <h4><a href="{{ route('home') }}">
+                    {{ $post->title }}
+                </a></h4>
+                <p><i>Người đăng:</i> {{ $post->moderator->username }}</p>
+                <p><i>Ngày đăng tải:</i> {{ $post->created_at }}</p>
+                <p><i>Cập nhật lần cuối:</i> {{ $post->updated_at }}</p>
+            </div>
+        @empty
+            <h5 class="text-center">Chưa có thông báo nào</h5>
+        @endforelse
     </div>
     <div class="container mt-5">
         <h3 class="text-center">Các tiểu thuyết hot nhất!!</h3>
