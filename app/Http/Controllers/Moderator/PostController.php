@@ -19,7 +19,7 @@ class PostController extends Controller
     private function checkPermission(): bool
     {
         $moderator = Auth::guard('moderator')->user();
-        return in_array($moderator->permission, ['post_moderator', 'admin']);
+        return $moderator->permission  === 'post_moderator';
     }
 
 
@@ -31,7 +31,12 @@ class PostController extends Controller
     public function showAllPost(Request $request)
     {
         // Tất cả moderator (trừ none) có thể xem danh sách bài đăng
-        // Chỉ post_moderator và admin mới có thể thêm/sửa/xóa
+        // Chỉ post_moderator mới có thể thêm/sửa/xóa
+        $moderator = Auth::guard('moderator')->user();
+        if ($moderator->permission === 'none') {
+            return redirect()->route('admin.dashboard')->with('error', 'Bạn không có quyền truy cập vào mục này');
+        }
+
         $keyword = trim((string) $request->query('q', ''));
 
         $posts = ModeratorPost::with('moderator')
@@ -41,13 +46,11 @@ class PostController extends Controller
                         $modQuery->where('username', 'like', "%{$keyword}%");
                     });
             })
-            ->latest()
+            ->orderByRaw("moderator_id = ? DESC", [$moderator->id])->latest()
             ->paginate(15)
             ->withQueryString();
 
-        $canManage = $this->checkPermission();
-
-        return view('admin.post.all_posts', compact('posts', 'keyword', 'canManage'));
+        return view('admin.profile.all_posts', compact('posts', 'keyword'));
     }
 
 
@@ -58,6 +61,8 @@ class PostController extends Controller
     // =========================================================
     public function show(string $post_id)
     {
+        $moderator = auth()->guard('moderator')->user();
+        $user = auth()->guard('web')->user();
         $post = ModeratorPost::with(['moderator', 'comments.user'])
             ->findOrFail($post_id);
 
@@ -69,7 +74,7 @@ class PostController extends Controller
             ->latest()
             ->paginate(15);
 
-        return view('admin.post.detail_post', compact('post', 'comments'));
+        return view('post.detail_post', compact('post', 'comments', 'user', 'moderator'));
     }
 
 
@@ -85,7 +90,7 @@ class PostController extends Controller
                 ->with('error', 'Bạn không có quyền truy cập vào mục này');
         }
 
-        return view('admin.post.new_post');
+        return view('post.new_post');
     }
 
 
@@ -133,9 +138,9 @@ class PostController extends Controller
                 ->with('error', 'Bạn không có quyền truy cập vào mục này');
         }
 
-        $post = ModeratorPost::findOrFail($post_id);
+        $post = ModeratorPost::whereModeratorId(Auth::guard('moderator')->user()->id)->findOrFail($post_id);
 
-        return view('admin.post.edit_post', compact('post'));
+        return view('post.edit_post', compact('post'));
     }
 
 
@@ -150,7 +155,7 @@ class PostController extends Controller
                 ->with('error', 'Bạn không có quyền truy cập vào mục này');
         }
 
-        $post = ModeratorPost::findOrFail($post_id);
+        $post = ModeratorPost::whereModeratorId(Auth::guard('moderator')->user()->id)->findOrFail($post_id);
 
         $request->validate([
             'title'       => 'required|string|max:100|unique:moderator_posts,title,' . $post_id,
@@ -187,25 +192,13 @@ class PostController extends Controller
             ], 403);
         }
 
-        $post = ModeratorPost::findOrFail($post_id);
+        $post = ModeratorPost::whereModeratorId(Auth::guard('moderator')->user()->id)->findOrFail($post_id);
 
-        // Xóa toàn bộ comment của bài đăng trước (bao gồm cả comment con)
-        DB::transaction(function () use ($post): void {
-            $rootComments = ModeratorPostComment::where('post_id', $post->id)
-                ->whereNull('parent_comment')
-                ->pluck('id');
-
-            foreach ($rootComments as $commentId) {
-                $this->deleteCommentTree(ModeratorPostComment::class, $commentId);
-            }
-
-            $post->delete();
-        });
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Đã xóa bài đăng.',
-        ]);
+        if($post->delete())
+            return response()->json([
+                'success' => true,
+                'message' => 'Đã xóa bài đăng.',
+            ]);
     }
 
 
