@@ -26,6 +26,10 @@ Route::controller(HomeController::class)->group(function(){
 });
 
 
+// Route truy cập bài đăng
+Route::get('/post/{post_id}', [PostController::class,'show'])->name('post.detail');
+
+
 // Route xử lý truyện
 Route::controller(FictionController::class)->group(function(){
     // Danh sách và chi tiết truyện
@@ -42,7 +46,7 @@ Route::controller(SeriesController::class)->group(function(){
 
 
 // Route xử lý chương
-Route::get('/chapter/{chapterId}', [ChapterController::class, 'show']);
+Route::get('/chapter/{chapterId}', [ChapterController::class, 'show'])->name('chapter.detail');
 
 
 // Route xử lý tương tác AJAX: like truyện/chương, vote bình luận
@@ -98,6 +102,9 @@ Route::prefix('author')->middleware('check.user.login')->group(function(){
     Route::put('/edit_fiction/{fictionId}/edit_chapter/{chapterId}', [AuthorChapterController::class, 'update']);
     // Xóa chương
     Route::delete('/edit_fiction/{fictionId}/delete_chapter/{chapterId}', [AuthorChapterController::class, 'destroy']);
+
+    // Preview chương truyện
+    Route::get('/chapter_preview/{chapterId}', [AuthorChapterController::class, 'preview'])->name('chapter.preview');
 
 
     // Series
@@ -181,14 +188,13 @@ Route::prefix('admin')->group(function(){
 
 
        Route::controller(PostController::class)->group(function(){
-    Route::get('/post_list', 'showAllPost')->name('admin.post_list');
-    Route::get('/post/{post_id}', 'show')->name('admin.post_detail');
-    Route::get('/new_post', 'showNewPost')->name('admin.new_post');
-    Route::post('/new_post', 'new_post');
-    Route::get('/edit_post/{post_id}', 'showEditPost')->name('admin.edit_post');
-    Route::post('/edit_post/{post_id}', 'edit_post');
-    Route::delete('/delete_post/{post_id}', 'delete_post');
-    Route::delete('/delete_post_comment/{comment_id}', 'delete_post_comment');
-});
+            Route::get('/post_list', 'showAllPost')->name('admin.post_list');
+            Route::get('/new_post', 'showNewPost')->name('admin.new_post');
+            Route::post('/new_post', 'new_post');
+            Route::get('/edit_post/{post_id}', 'showEditPost')->name('admin.edit_post');
+            Route::post('/edit_post/{post_id}', 'edit_post');
+            Route::delete('/delete_post/{post_id}', 'delete_post');
+            Route::delete('/delete_post_comment/{comment_id}', 'delete_post_comment');
+        });
     });
 });
