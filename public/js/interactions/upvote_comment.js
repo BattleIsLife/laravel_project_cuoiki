@@ -1,5 +1,6 @@
 async function upvote_comment(btn, value) {
-    const comment_id = btn.getAttribute('data-id');
+    const comment_box = btn.closest('div.comment-box');
+    const comment_id = comment_box.getAttribute('data-id');
     // alert(`Bạn đã tương tác với bình luận ${id}: ${value}`);
 
     const payload = {
@@ -43,7 +44,8 @@ async function upvote_comment(btn, value) {
 }
 
 async function upvote_post_comment(btn, value) {
-    const comment_id = btn.getAttribute('data-id');
+    const comment_box = btn.closest('div.comment-box');
+    const comment_id = comment_box.getAttribute('data-id');
     // alert(`Bạn đã tương tác với bình luận ${id}: ${value}`);
 
     const payload = {
