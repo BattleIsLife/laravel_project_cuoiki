@@ -46,7 +46,8 @@ jobs:
       - name: Prepare Environment
         run: |
           cp .env.testing .env
-          php artisan key:generate
+          php artisan key:generate --force
+          php artisan config:clear
         env:
           APP_ENV: testing
 
