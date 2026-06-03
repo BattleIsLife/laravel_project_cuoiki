@@ -145,7 +145,8 @@ class AuthController extends Controller
     // =========================================================
     public function delete_account()
     {
-        return view('user.delete_account');
+        $user = Auth::guard('web')->user();
+        return view('user.delete_account', compact('user'));
     }
 
     public function delete_account_attempt(Request $request)

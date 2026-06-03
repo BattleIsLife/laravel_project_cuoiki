@@ -1,12 +1,8 @@
 @extends('main')
 @section('title')
-    Bài đăng - {{ $post->name }}
+    Bài đăng - {{ $post->title }}
 @endsection
 @section('content')
-@php
-    $moderator = auth()->guard('moderator')->user();
-    $user = auth()->guard('web')->user();
-@endphp
 <div class="container-sm mt-3 p-4">
     <h3 class="text-center">{{ $post->title }}</h3>
     <div class="container mt-2 p-3 card" style="max-width: 900px; min-height: 60vh;">

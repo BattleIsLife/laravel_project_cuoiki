@@ -45,13 +45,8 @@
                     <td>{{ $user->created_at }}</td>
                     @php
                         $stt++;
-                        $status = "Còn hoạt động";
-                        if($user->deleted_at)
-                            $status = "Đã xóa";
-                        if($user->blocked_until)
-                            $status = "Bị chặn";
                     @endphp
-                    <td>{{ $status }}</td>
+                    <td>{{ $user->status }}</td>
                     <td><button type="button" 
                                 class="btn btn-danger" 
                                 data-bs-toggle="modal" 
@@ -60,6 +55,7 @@
                                 data-username="{{ $user->username }}"
                                 data-email="{{ $user->email }}"
                                 data-blocked-until="{{ $user->blocked_until }}"
+                                @if ($user->deleted_at) disabled  @endif
                                 onclick="get_user_info(this)">
                             Hành động
                         </button>
