@@ -36,11 +36,13 @@
         <button class="btn btn-success" type="submit">Search</button>
     </form>
 
-    <div class="container d-flex justify-content-end mt-3">
-        <a class="btn btn-success" style="width: fit-content" href="{{ route('admin.new_post') }}">
-            Thêm bài đăng mới
-        </a>
-    </div>
+    @if ($moderator->permission === 'post_moderator')
+        <div class="container d-flex justify-content-end mt-3">
+            <a class="btn btn-success" style="width: fit-content" href="{{ route('admin.new_post') }}">
+                Thêm bài đăng mới
+            </a>
+        </div>
+    @endif
 
     <div class="d-flex flex-column">
         @forelse ($posts as $post)
