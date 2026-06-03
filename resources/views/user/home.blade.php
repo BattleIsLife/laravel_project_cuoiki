@@ -11,7 +11,7 @@
         <h3 class="text-center">Thông báo của moderator</h3>
         @forelse ($posts as $post)
             <div class="card p-3 mt-3 text-center">
-                <h4><a href="{{ route('home') }}">
+                <h4><a href="{{ route('post.detail', $post->id) }}">
                     {{ $post->title }}
                 </a></h4>
                 <p><i>Người đăng:</i> {{ $post->moderator->username }}</p>
