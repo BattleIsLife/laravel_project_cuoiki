@@ -79,4 +79,17 @@ class User extends Authenticatable
     {
         return $this->hasMany(UpvoteModeratorPostCommentHistory::class, 'user_id');
     }
+
+
+    // tự sinh thuộc tính status
+    public function getStatusAttribute()
+    {
+        $status = "Còn hoạt động";
+        if($this->deleted_at)
+            $status = "Đã xóa";
+        if($this->blocked_until)
+            $status = "Bị chặn";
+
+        return $status;
+    }
 }
