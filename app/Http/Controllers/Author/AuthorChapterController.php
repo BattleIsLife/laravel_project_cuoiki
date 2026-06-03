@@ -156,4 +156,20 @@ class AuthorChapterController extends Controller
             'message' => 'Đã xóa chương.',
         ]);
     }
+
+    public function preview(string $chapterId)
+    {
+        $user = Auth::guard('web')->user();
+        $chapter = Chapter::whereId($chapterId)
+                    ->firstOrFail();
+
+        if($chapter->fiction->user_id !== $user->id)
+            abort(404);
+
+        $data = [
+            'chapter' => $chapter,
+        ];
+
+        return view('chapter.preview_chapters', $data);
+    }
 }
