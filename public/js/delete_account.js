@@ -14,9 +14,13 @@ document.getElementById('deleteForm').addEventListener('submit', function(e){
     const password = document.getElementById('password').value;
 
     // Validate email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (email === '') {
-        isValid = false;
         showError('email', 'Vui lòng nhập email');
+        isValid = false;
+    } else if (!emailRegex.test(email)) {
+        showError('email', 'Email không hợp lệ');
+        isValid = false;
     }
 
     // Validate password

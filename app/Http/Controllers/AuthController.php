@@ -62,16 +62,16 @@ class AuthController extends Controller
     {
         // 1. Tự động kiểm tra trống trường. Nếu lỗi, Laravel tự "quay xe" về form cũ
         $credentials = $request->validate([
-            'username'    => 'required|string|min:3|max:50',
+            'email'    => 'required|email',
             'password' => 'required|string|min:6|max:50',
         ], 
         [
-            'username.required' => 'Vui lòng nhập username',
+            'email.required' => 'Vui lòng nhập email',
             'password.required' => 'Vui lòng nhập mật khẩu.',
         ]);
 
         // Sử dụng withTrashed() để ép Laravel quét qua cả các bản ghi có deleted_at
-        $user = User::withTrashed()->where('username', $credentials['username'])->first();
+        $user = User::withTrashed()->where('email', $credentials['email'])->first();
 
         if ($user && $user->trashed()) {
             // Nếu tìm thấy tài khoản nhưng tài khoản này đã dính deleted_at (trashed)
@@ -79,7 +79,7 @@ class AuthController extends Controller
                         ->withInput();
         }
 
-        $blocked_user = User::whereUsername($credentials['username'])->first();
+        $blocked_user = User::whereEmail($credentials['email'])->first();
         if($blocked_user && $blocked_user->blocked_until && $blocked_user->blocked_until->isFuture())
             return back()->with('error', 'Tài khoản này bị chặn cho tới ' . $blocked_user->blocked_until)
                         ->withInput();
