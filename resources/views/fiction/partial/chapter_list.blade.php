@@ -38,7 +38,8 @@
                 </a></h4>
                 <p><i>Ngày đăng tải:</i> {{ $chapter->created_at }}</p>
                 <p><i>Cập nhật lần cuối:</i> {{ $chapter->updated_at }}</p>
-                <div class="mt-3">
+                <div>
+                    <a class="btn btn-primary" href="{{ route('chapter.preview', $chapter->id) }}">Preview</a>
                     <a class="btn btn-danger delete-btn" style="width: fit-content; height: fit-content;" 
                            data-bs-toggle="modal"
                            data-bs-target="#deleteModal"
