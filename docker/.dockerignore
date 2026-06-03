@@ -1,0 +1,38 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Laravel log và cache local
+/storage/logs/*
+/storage/framework/cache/data/*
+/storage/framework/sessions/*
+/storage/framework/testing/*
+/storage/framework/views/*
+!/storage/logs/.gitignore
+!/storage/framework/cache/data/.gitignore
+!/storage/framework/sessions/.gitignore
+!/storage/framework/testing/.gitignore
+!/storage/framework/views/.gitignore
+
+# Dependencies (Sẽ được cài đặt lại qua RUN composer/npm inside Docker)
+/vendor
+/node_modules
+
+# Môi trường và cấu hình nhạy cảm
+.env
+.env.production
+.env.local
+
+# Docker configuration (Không cần thiết mang ngược vào trong container)
+/docker
+compose.yml
+.dockerignore
+
+# Testing và IDEs
+/tests
+.phpunit.result.cache
+.idea
+.vscode
+.DS_Store
+Thumbs.db
