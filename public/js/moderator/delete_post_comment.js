@@ -1,6 +1,7 @@
 function moderator_delete_comment(btn) {
     // Lấy comment_id
-    const comment_id = btn.getAttribute('data-id');
+    const comment_box = btn.closest('div.comment-box');
+    const comment_id = comment_box.getAttribute('data-id');
 
     // Lấy nút xác nhận xóa
     const delete_button = document.getElementById('moderator_confirm_delete_comment');
