@@ -57,12 +57,11 @@ function addCommentToList(comment) {
             <textarea class="form-control" disabled readonly required rows="6" >${comment.content}</textarea>
             <div class="mt-2 reply_comment"><button class="btn btn-primary" onclick="reply_comment(this, '${comment.id}')">Phản hồi bình luận</button></div>
             <div class="d-flex flex-row mt-2">
-                <button class="btn btn-success" data-id="${comment.id}" onclick="upvote_post_comment(this, 1)">Upvote</button>
-                <button class="btn btn-danger" data-id="${comment.id}" onclick="upvote_post_comment(this, -1)">Downvote</button>
+                <button class="btn btn-success" onclick="upvote_post_comment(this, 1)">Upvote</button>
+                <button class="btn btn-danger" onclick="upvote_post_comment(this, -1)">Downvote</button>
                 <button class="btn btn-secondary" 
                         data-bs-toggle="modal"
                         data-bs-target="#userDeleteCommentModal" 
-                        data-id="${comment.id}" 
                         onclick="user_delete_comment(this)">
                         Gỡ bình luận
                 </button>
@@ -170,12 +169,11 @@ async function add_child_to_comment(btn, comment_id) {
             </div>
             <textarea class="form-control" disabled readonly required rows="6" >${comment.content}</textarea>
             <div class="d-flex flex-row mt-2">
-                <button class="btn btn-success" data-id="${comment.id}" onclick="upvote_post_comment(this, 1)">Upvote</button>
-                <button class="btn btn-danger" data-id="${comment.id}" onclick="upvote_post_comment(this, -1)">Downvote</button>
+                <button class="btn btn-success" onclick="upvote_post_comment(this, 1)">Upvote</button>
+                <button class="btn btn-danger" onclick="upvote_post_comment(this, -1)">Downvote</button>
                 <button class="btn btn-secondary" 
                         data-bs-toggle="modal"
                         data-bs-target="#userDeleteCommentModal" 
-                        data-id="${comment.id}"
                         onclick="user_delete_comment(this)">
                         Gỡ bình luận
                 </button>
