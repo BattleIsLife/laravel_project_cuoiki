@@ -19,7 +19,7 @@ class ModeratorPost extends Model
 
     public function moderator()
     {
-        return $this->belongsTo(Moderator::class, 'moderator_id');
+        return $this->belongsTo(Moderator::class, 'moderator_id')->withTrashed();
     }
 
     public function comments()
