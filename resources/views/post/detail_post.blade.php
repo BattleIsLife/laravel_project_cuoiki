@@ -37,7 +37,6 @@
                         <a class="btn btn-danger delete-btn" style="width: fit-content; height: fit-content;" 
                         data-bs-toggle="modal"
                         data-bs-target="#moderatorDeleteCommentModal"
-                        data-id="{{ $comment->id }}"
                         onclick="moderator_delete_comment(this)">
                             Xóa bình luận
                         </a>
@@ -46,13 +45,12 @@
                 @if ($user)
                     <div class="mt-2 reply_comment"><button class="btn btn-primary" onclick="reply_comment(this, '{{ $comment->id }}')">Phản hồi bình luận</button></div>
                     <div class="d-flex flex-row mt-2">
-                        <button class="btn btn-success" data-id="{{ $comment->id }}" onclick="upvote_post_comment(this, 1)">Upvote</button>
-                        <button class="btn btn-danger" data-id="{{ $comment->id }}" onclick="upvote_post_comment(this, -1)">Downvote</button>
+                        <button class="btn btn-success" onclick="upvote_post_comment(this, 1)">Upvote</button>
+                        <button class="btn btn-danger" onclick="upvote_post_comment(this, -1)">Downvote</button>
                         @if ($user->id === $comment->user_id)
                             <button class="btn btn-secondary" 
                                     data-bs-toggle="modal"
                                     data-bs-target="#userDeleteCommentModal"
-                                    data-id="{{ $comment->id }}"
                                     onclick="user_delete_comment(this)">
                                     Gỡ bình luận
                             </button>
@@ -74,7 +72,7 @@
                                     <a class="btn btn-danger delete-btn" style="width: fit-content; height: fit-content;" 
                                     data-bs-toggle="modal"
                                     data-bs-target="#moderatorDeleteCommentModal"
-                                    data-id="{{ $child->id }}"
+                                
                                     onclick="moderator_delete_comment(this)">
                                         Xóa bình luận
                                     </a>
@@ -82,13 +80,12 @@
                             @endif
                             @if ($user)
                                 <div class="d-flex flex-row mt-2">
-                                    <button class="btn btn-success" data-id="{{ $child->id }}" onclick="upvote_post_comment(this, 1)">Upvote</button>
-                                    <button class="btn btn-danger" data-id="{{ $child->id }}" onclick="upvote_post_comment(this, -1)">Downvote</button>
+                                    <button class="btn btn-success" onclick="upvote_post_comment(this, 1)">Upvote</button>
+                                    <button class="btn btn-danger" onclick="upvote_post_comment(this, -1)">Downvote</button>
                                     @if ($user->id === $comment->user_id)
                                         <button class="btn btn-secondary" 
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#userDeleteCommentModal" 
-                                                data-id="{{ $child->id }}"
                                                 onclick="user_delete_comment(this)">
                                                 Gỡ bình luận
                                         </button>
@@ -98,7 +95,6 @@
                                             <a class="btn btn-danger delete-btn" style="width: fit-content; height: fit-content;" 
                                             data-bs-toggle="modal"
                                             data-bs-target="#moderatorDeleteModal"
-                                            data-id="{{ $chapter->id }}"
                                             data-name="{{ $chapter->chapter_name }}"
                                             onclick="get_delete_id(this)">
                                                 Xóa bình luận
