@@ -25,10 +25,14 @@ COPY . .
 COPY --from=docker.io/library/composer:latest /usr/bin/composer /usr/bin/composer
 RUN composer install --no-dev --optimize-autoloader
 
+RUN chown -R www-data:www-data /var/www/html/storage
+
 # Migration
 RUN php artisan key:generate \
     php artisan migrate \
     php artisan db:seed
+
+
 
 EXPOSE 80
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
