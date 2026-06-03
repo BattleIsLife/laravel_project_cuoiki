@@ -161,10 +161,27 @@ class ManagmentController extends Controller
 
         $data = [
             'users' => $users,
-            'keyword' => $keyword
+            'keyword' => $keyword,
+            'moderator' => $moderator
         ];
 
         return view('admin.profile.all_users', $data);
+    }
+
+    // API: Lấy người dùng từ id
+    // POST: /admin/get_user_info/{id}
+    public function get_user_info(string $id)
+    {
+        $moderator = Auth::guard('moderator')->user();
+        if ($moderator->permission !== "user_moderator") {
+            return response()->json(['message' => 'Không có quyền', 'success' => false], 403);
+        }
+        $user = User::whereId($id)->firstOrFail();
+
+        return response()->json([
+            'user' => $user,
+            'success' => true
+        ]);
     }
 
     public function block_user(Request $request, string $user_id)
@@ -247,7 +264,7 @@ class ManagmentController extends Controller
     {
         $moderator = Auth::guard('moderator')->user();
         if ($moderator->permission !== "user_moderator") {
-            return;
+            return response()->json(['message' => 'Không có quyền', 'success' => false], 403);
         }
 
         $series = Series::whereId($series_id)
@@ -269,7 +286,7 @@ class ManagmentController extends Controller
     {
         $moderator = Auth::guard('moderator')->user();
         if ($moderator->permission !== "user_moderator") {
-            return;
+            return response()->json(['message' => 'Không có quyền', 'success' => false], 403);
         }
 
         $fiction = Fiction::whereId($fiction_id)
@@ -291,7 +308,7 @@ class ManagmentController extends Controller
     {
         $moderator = Auth::guard('moderator')->user();
         if ($moderator->permission !== "user_moderator") {
-            return;
+            return response()->json(['message' => 'Không có quyền', 'success' => false], 403);
         }
 
         $chapter = Chapter::whereId($chapter_id)->firstOrFail();
@@ -308,7 +325,7 @@ class ManagmentController extends Controller
     {
         $moderator = Auth::guard('moderator')->user();
         if ($moderator->permission !== "user_moderator") {
-            return;
+            return response()->json(['message' => 'Không có quyền', 'success' => false], 403);
         }
 
         $comment = ChapterComment::where('id', $comment_id)->firstOrFail();
@@ -341,7 +358,8 @@ class ManagmentController extends Controller
             })->withTrashed()->latest('created_at')->paginate(10)->withQueryString();
 
         $data = [
-            'moderators' => $moderators
+            'moderators' => $moderators,
+            'moderator' => $moderator
         ];
 
         return view('admin.profile.all_moderators', $data);
@@ -447,5 +465,49 @@ class ManagmentController extends Controller
             return redirect()->route('admin.dashboard')->with('success', 'Thay đổi thông tin thành công');
 
         return redirect()->route('admin.dashboard')->with('error', 'Thay đổi thông tin thất bại');
+    }
+
+    // Xóa/khôi phục tài khoản của moderator
+    // POST: admin/toggle_moderator/{moderator_id}
+    public function toggleModeratorDelete(string $moderator_id)
+    {
+        $user = Auth::guard('moderator')->user();
+        if ($user->permission !== "admin") {
+            return response()->json(['message' => 'Không có quyền', 'success' => false], 403);
+        }
+        $moderator = Moderator::withTrashed()->where('permission', '!=', 'admin')->whereId($moderator_id)->firstOrFail();
+
+        $message = "";
+
+        if($moderator->deleted_at)
+        {
+            $message = "Khôi phục tài khoản {$moderator->username} ";
+            if($moderator->restore())
+                return back()->with('success', $message . "thành công");
+            return back()->with('error', $message . "thất bại");
+        }
+
+        $message = "Vô hiệu hóa tài khoản {$moderator->username} ";
+        if($moderator->delete())
+                return back()->with('success', $message . "thành công");
+            return back()->with('error', $message . "thất bại");
+        
+    }
+
+
+    // API: Lấy thông tin của moderator
+    // POST: admin/get_moderator_info/{mod_id}
+    public function getModerator(string $mod_id)
+    {
+        $user = Auth::guard('moderator')->user();
+        if($user->permission !== 'admin')
+            return response()->json(['message' => 'Không có quyền', 'success' => false], 403);
+
+        $moderator = Moderator::withTrashed()->where('permission', '!=', 'admin')->whereId($mod_id)->firstOrFail();
+
+        return response()->json([
+            'moderator' => $moderator,
+            'success' => true
+        ]);
     }
 }
