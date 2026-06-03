@@ -13,6 +13,9 @@ async function moderator_confirm_delete_comment(btn) {
     // Lấy comment_id
     const comment_id = btn.getAttribute('data-id');
 
+    btn.disabled = true;
+    close_button.disabled = true;
+
     // Láy nút xóa để đóng
     const close_button = document.getElementById('close_moderator_delete_comment_modal');
 
@@ -26,8 +29,7 @@ async function moderator_confirm_delete_comment(btn) {
         },
     });
 
-    btn.disabled = true;
-    close_button.disabled = true;
+    
     const data = await response.json();
 
     // Không xử lý nếu như like thất bại

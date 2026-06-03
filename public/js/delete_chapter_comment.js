@@ -18,6 +18,9 @@ async function user_confirm_delete_comment(btn) {
 
     const comment_box = document.querySelector(`div[data-id="${comment_id}"]`);
 
+    btn.disabled = true;
+    close_button.disabled = true;
+
     const response = await fetch(`${BASE_URL}/chapter_comments/${comment_id}`, {
         method: 'DELETE',
         headers: {
@@ -26,8 +29,6 @@ async function user_confirm_delete_comment(btn) {
         },
     });
 
-    btn.disabled = true;
-    close_button.disabled = true;
     const data = await response.json();
 
     // Không xử lý nếu như like thất bại

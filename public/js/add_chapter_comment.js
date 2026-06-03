@@ -18,6 +18,8 @@ document.getElementById('commentForm').addEventListener('submit', async function
         return;   
     }
 
+    submitComment.disabled = true;
+
     const response = await fetch(`${BASE_URL}/chapter/${CHAPTER_ID}/comments`, {
         method: 'POST',
         headers: {
@@ -28,7 +30,6 @@ document.getElementById('commentForm').addEventListener('submit', async function
         body: formData
     });
 
-    submitComment.disabled = true;
     const data = await response.json();
 
     // Không xử lý nếu bình luận thất bại
@@ -121,6 +122,14 @@ async function add_child_to_comment(btn, comment_id) {
         return;   
     }
 
+    // Lấy thẻ div chứa tất cả các nút và vô hiệu hóa trong quá trình gửi, tránh bấm nhiều hơn 1 lần
+    const parent_div = btn.closest('.main-comment-wrapper');
+    const all_btn = parent_div.querySelectorAll('button');
+    for (let i = 0; i < all_btn.length; i++) {
+        const element = all_btn[i];
+        element.disabled = true;
+    }
+
     // data gửi đi lên server
     const payload = {
         parent_comment: comment_id,
@@ -136,14 +145,6 @@ async function add_child_to_comment(btn, comment_id) {
         },
         body: JSON.stringify(payload)
     });
-
-    // Lấy thẻ div chứa tất cả các nút và vô hiệu hóa trong quá trình gửi, tránh bấm nhiều hơn 1 lần
-    const parent_div = btn.closest('.main-comment-wrapper');
-    const all_btn = parent_div.querySelectorAll('button');
-    for (let i = 0; i < all_btn.length; i++) {
-        const element = all_btn[i];
-        element.disabled = true;
-    }
 
     const data = await response.json();
 

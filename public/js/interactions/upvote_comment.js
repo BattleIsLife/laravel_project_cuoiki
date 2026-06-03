@@ -3,6 +3,14 @@ async function upvote_comment(btn, value) {
     const comment_id = comment_box.getAttribute('data-id');
     // alert(`Bạn đã tương tác với bình luận ${id}: ${value}`);
 
+    const parent_div = btn.parentElement.parentElement;
+    const all_btn = parent_div.querySelectorAll('button');
+
+    for (let i = 0; i < all_btn.length; i++) {
+        const button = all_btn[i];
+        button.disabled = true;   
+    }
+
     const payload = {
         vote: value
     };
@@ -16,14 +24,6 @@ async function upvote_comment(btn, value) {
         },
         body: JSON.stringify(payload)
     });
-
-    const parent_div = btn.parentElement.parentElement;
-    const all_btn = parent_div.querySelectorAll('button');
-
-    for (let i = 0; i < all_btn.length; i++) {
-        const button = all_btn[i];
-        button.disabled = true;   
-    }
 
     const data = await response.json();
 

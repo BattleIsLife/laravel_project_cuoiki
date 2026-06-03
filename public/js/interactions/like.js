@@ -30,6 +30,7 @@ async function like_fiction_in_series(btn) {
     const fiction_id = btn.getAttribute('data-bs-id');
 
     // alert('Bạn vừa like chương: ' + fiction_id);
+    btn.disabled = true;
     // Fetch API
     const response = await fetch(`${BASE_URL}/fiction/${fiction_id}/like`, {
         method: 'POST',
@@ -39,7 +40,6 @@ async function like_fiction_in_series(btn) {
         },
     });
 
-    btn.disabled = true;
     const data = await response.json();
 
     // Không xử lý nếu như like thất bại
@@ -69,6 +69,7 @@ async function like_chapter(btn) {
     const chapter_id = btn.getAttribute('data-bs-id');
 
     // alert('Bạn vừa like chương: ' + chapter_id);
+    btn.disabled = true;
     // Fetch API
     const response = await fetch(`${BASE_URL}/chapter/${chapter_id}/like`, {
         method: 'POST',
@@ -78,7 +79,6 @@ async function like_chapter(btn) {
         },
     });
 
-    btn.disabled = true;
     const data = await response.json();
 
     // Không xử lý nếu như like thất bại
