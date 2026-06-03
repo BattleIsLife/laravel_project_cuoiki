@@ -45,15 +45,17 @@ jobs:
 
       - name: Prepare Environment
         run: |
-          cp .env.testing .env
+          cp .env.testing .env || cp .env.example .env
           php artisan key:generate --force
-          php artisan config:clear
         env:
           APP_ENV: testing
 
+      # Sử dụng khối env chung cho cả Migration và Test để đồng bộ APP_KEY
       - name: Run Migrations
         run: php artisan migrate --force
         env:
+          APP_ENV: testing
+          APP_KEY: base64:ykU9bu4AegMHWw8v9N0CZ79vK17LpZAnSuY6u6OnG8E=
           DB_CONNECTION: mysql
           DB_HOST: 127.0.0.1
           DB_PORT: 3306
@@ -63,3 +65,12 @@ jobs:
 
       - name: Run Tests
         run: php artisan test
+        env:
+          APP_ENV: testing
+          APP_KEY: base64:ykU9bu4AegMHWw8v9N0CZ79vK17LpZAnSuY6u6OnG8E=
+          DB_CONNECTION: mysql
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_DATABASE: laravel_test
+          DB_USERNAME: root
+          DB_PASSWORD: ""
