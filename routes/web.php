@@ -184,6 +184,15 @@ Route::prefix('admin')->group(function(){
             // Thay đổi thông tin
             Route::get('/change_info', 'showChangeInfo')->name('admin.change_info');
             Route::put('/change_info', 'change_info');
+
+            // Vô hiệu/khổi phục tài khoản của moderator
+            Route::post('/toggle_moderator/{moderator_id}', 'toggleModeratorDelete');
+
+            // API lấy thông tin moderator
+            Route::post('/get_moderator_info/{mod_id}', 'getModerator');
+
+            // APIT lấy thông tin user
+            Route::post('/get_user_info/{id}', 'get_user_info');
         });
 
 
