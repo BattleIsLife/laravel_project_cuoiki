@@ -52,9 +52,6 @@
                                 data-bs-toggle="modal" 
                                 data-bs-target="#changeInfoModal"
                                 data-id="{{ $user->id }}"
-                                data-username="{{ $user->username }}"
-                                data-email="{{ $user->email }}"
-                                data-blocked-until="{{ $user->blocked_until }}"
                                 @if ($user->deleted_at) disabled  @endif
                                 onclick="get_user_info(this)">
                             Hành động
@@ -116,6 +113,7 @@
 </div>
 <script>
     const BASE_URL = "{{ url('/') }}";
+    const CSRF_TOKEN = "{{ csrf_token() }}";
 </script>
 <script src="{{ @asset('js/moderator/user_info.js') }}"></script>
 
