@@ -10,6 +10,7 @@ use App\Models\Moderator;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Fiction;
+use App\Models\ModeratorPostComment;
 use App\Models\Series;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -18,9 +19,128 @@ use Illuminate\Support\Facades\Storage;
 
 class ManagmentController extends Controller
 {
-    public function dashboard()
+    public function dashboard(Request $request)
     {
-        return view('admin.profile.dashboard');
+        // KIỂM TRA: Nếu bộ lọc KHÔNG PHẢI là custom nhưng URL lại chứa start_date hoặc end_date
+        if ($request->query('filter') !== 'custom' && ($request->has('start_date') || $request->has('end_date'))) {
+            
+            // Tiến hành lọc bỏ hoàn toàn start_date và end_date ra khỏi danh sách tham số
+            $cleanQueries = $request->except(['start_date', 'end_date']);
+            
+            // Chuyển hướng người dùng về chính trang này với URL đã được làm sạch rác
+            return redirect()->to($request->url() . '?' . http_build_query($cleanQueries));
+        }
+        $moderator = Auth::guard('moderator')->user();
+        $dashboard_data = [];
+        // Dành cho các moderator khác, không áp dụng bộ lọc
+        if ($moderator->permission === 'admin') {
+            $dashboard_data = $this->admin_dashboard($request);
+        }
+        else
+        {
+            $dashboard_data = $this->normal_dashboard();
+        }
+
+        $data = [
+            'dashboard_data' => $dashboard_data,
+            'moderator'     => $moderator
+        ];
+
+        return view('admin.profile.dashboard', $data);
+    }
+
+
+    // Dashboard cho người không phải là admin
+    private function normal_dashboard()
+    {
+        // 1. Lấy ngày hôm nay dưới dạng Y-m-d bằng thư viện Carbon có sẵn của Laravel
+        $today = Carbon::today();
+
+        // 2. Tính tổng lượt đọc của các chương được xem trong ngày hôm nay
+        $totalReadsToday = Chapter::whereDate('updated_at', $today)->sum('watch_count');
+
+        // 3. Đếm tổng số bình luận được viết trong ngày hôm nay
+        $totalCommentsToday = ChapterComment::whereDate('created_at', $today)->count() + ModeratorPostComment::whereDate('created_at', $today)->count();
+
+        // 4. Đếm số chương truyện thực sự được bấm ĐĂNG TẢI (is_posted = 1) trong ngày hôm nay
+        $totalChaptersToday = Chapter::where('is_posted', 1)
+                                    ->whereDate('created_at', $today)
+                                    ->count();
+        $totalNewUsersToday = User::whereDate('created_at', $today)->count();
+
+        $dashboard_data = [
+            'totalReadsToday' => $totalReadsToday,
+            'totalCommentsToday' => $totalCommentsToday,
+            'totalChaptersToday' => $totalChaptersToday,
+            'totalNewUsersToday' => $totalNewUsersToday
+        ];
+
+        return $dashboard_data;
+    }
+
+    // Dashboard cho admin
+    private function admin_dashboard(Request $request)
+    {
+        // 1. Xác định khoảng thời gian dựa trên bộ lọc (Mặc định nếu không chọn là hôm nay)
+        $filter = $request->query('filter', 'today'); 
+        $startDate = Carbon::today();
+        $endDate = Carbon::today()->endOfDay();
+
+        // Xử lý các trường hợp bộ lọc mà Admin chọn ngoài giao diện
+        switch ($filter) {
+            case 'yesterday':
+                $startDate = Carbon::yesterday();
+                $endDate = Carbon::yesterday()->endOfDay();
+                break;
+                
+            case '7_days':
+                $startDate = Carbon::now()->subDays(7)->startOfDay();
+                $endDate = Carbon::now()->endOfDay();
+                break;
+                
+            case 'custom':
+                // Nếu admin chọn khoảng ngày bất kỳ (Ví dụ từ hệ thống chọn ngày picker)
+                if ($request->has('start_date') && $request->has('end_date')) {
+                    $startDate = Carbon::parse($request->query('start_date'))->startOfDay();
+                    $endDate = Carbon::parse($request->query('end_date'))->endOfDay();
+                }
+                break;
+                
+            default: // 'today'
+                $startDate = Carbon::today();
+                $endDate = Carbon::today()->endOfDay();
+                break;
+        }
+
+        // 2. Tiến hành truy vấn sử dụng hàm whereBetween() thay vì whereDate() để quét theo khoảng thời gian dynamic
+        $totalReads = Chapter::whereBetween('updated_at', [$startDate, $endDate])->sum('watch_count');
+
+        $totalComments = ChapterComment::whereBetween('created_at', [$startDate, $endDate])->count() 
+                    + ModeratorPostComment::whereBetween('created_at', [$startDate, $endDate])->count();
+
+        $totalChapters = Chapter::where('is_posted', 1)
+                                ->whereBetween('created_at', [$startDate, $endDate])
+                                ->count();
+
+        $totalNewUsers = User::whereBetween('created_at', [$startDate, $endDate])->count();
+
+        $message = "Báo cáo ";
+        if($startDate->format('d-m-Y') === $endDate->format('d-m-Y'))
+            $message .= "trong ngày " . $startDate->format('d-m-Y');
+        else
+            $message .= "từ ngày " . $startDate->format('d-m-Y') . " đến ngày ". $endDate->format('d-m-Y');
+
+        // Trả về kết quả kèm theo thông tin filter hiện tại để ngoài View biết đường hiển thị trạng thái active
+        return [
+            'totalReadsToday'    => $totalReads,
+            'totalCommentsToday' => $totalComments,
+            'totalChaptersToday' => $totalChapters,
+            'totalNewUsersToday' => $totalNewUsers,
+            'current_filter'     => $filter,
+            'message'            => $message,
+            'start_date'         => $startDate->format('Y-m-d'),
+            'end_date'           => $endDate->format('Y-m-d'),
+        ];
     }
 
 
@@ -34,7 +154,7 @@ class ManagmentController extends Controller
         }
 
         $keyword = trim((string) $request->query('q', ''));
-        $users = User::when($keyword !== '', function ($query) use ($keyword) {
+        $users = User::withTrashed()->when($keyword !== '', function ($query) use ($keyword) {
                 $query->where('username', 'like', "%{$keyword}%");
             })->latest('created_at')->paginate(10)->withQueryString();
 
@@ -218,7 +338,7 @@ class ManagmentController extends Controller
 
         $moderators = Moderator::when($keyword !== '', function ($query) use ($keyword) {
                 $query->where('username', 'like', "%{$keyword}%");
-            })->latest('created_at')->paginate(10)->withQueryString();
+            })->withTrashed()->latest('created_at')->paginate(10)->withQueryString();
 
         $data = [
             'moderators' => $moderators
