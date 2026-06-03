@@ -4,7 +4,7 @@
 @endsection
 @section('moderator_profile_component')
 <div class="text-center">
-    <h2>Danh sách người dùng</h2>
+    <h2>Danh sách quản trị viên</h2>
     @if (session()->has('error'))
             <div class="alert alert-danger">
                 {{ session()->get('error') }}
