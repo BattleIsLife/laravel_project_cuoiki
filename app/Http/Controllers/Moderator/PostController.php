@@ -13,13 +13,13 @@ use Illuminate\Support\Facades\DB;
 class PostController extends Controller
 {
     // =========================================================
-    // Kiểm tra quyền post_moderator
+    // Kiểm tra quyền post_moderator or admin
     // Dùng nội bộ để tránh lặp code
     // =========================================================
     private function checkPermission(): bool
     {
         $moderator = Auth::guard('moderator')->user();
-        return $moderator->permission  === 'post_moderator';
+        return $moderator->permission  === 'post_moderator' || $moderator->permission === "admin";
     }
 
 
@@ -30,10 +30,10 @@ class PostController extends Controller
     // =========================================================
     public function showAllPost(Request $request)
     {
-        // Tất cả moderator (trừ none) có thể xem danh sách bài đăng
+        // Chỉ admin và post moderator có thể xem danh sách bài đăng
         // Chỉ post_moderator mới có thể thêm/sửa/xóa
         $moderator = Auth::guard('moderator')->user();
-        if ($moderator->permission === 'none') {
+        if (!$this->checkPermission()) {
             return redirect()->route('admin.dashboard')->with('error', 'Bạn không có quyền truy cập vào mục này');
         }
 
@@ -50,7 +50,7 @@ class PostController extends Controller
             ->paginate(15)
             ->withQueryString();
 
-        return view('admin.profile.all_posts', compact('posts', 'keyword'));
+        return view('admin.profile.all_posts', compact('posts', 'keyword', 'moderator'));
     }
 
 
@@ -133,12 +133,13 @@ class PostController extends Controller
     // =========================================================
     public function showEditPost(string $post_id)
     {
-        if (!$this->checkPermission()) {
+        $moderator = Auth::guard('moderator')->user();
+        if ($moderator->permission !== 'post_moderator') {
             return redirect()->route('admin.dashboard')
                 ->with('error', 'Bạn không có quyền truy cập vào mục này');
         }
 
-        $post = ModeratorPost::whereModeratorId(Auth::guard('moderator')->user()->id)->findOrFail($post_id);
+        $post = ModeratorPost::whereModeratorId($moderator->id)->findOrFail($post_id);
 
         return view('post.edit_post', compact('post'));
     }
@@ -150,7 +151,8 @@ class PostController extends Controller
     // =========================================================
     public function edit_post(Request $request, string $post_id)
     {
-        if (!$this->checkPermission()) {
+        $moderator = Auth::guard('moderator')->user();
+        if ($moderator->permission !== 'post_moderator') {
             return redirect()->route('admin.dashboard')
                 ->with('error', 'Bạn không có quyền truy cập vào mục này');
         }
@@ -185,7 +187,8 @@ class PostController extends Controller
     // =========================================================
     public function delete_post(string $post_id)
     {
-        if (!$this->checkPermission()) {
+        $moderator = Auth::guard('moderator')->user();
+        if ($moderator->permission !== 'post_moderator') {
             return response()->json([
                 'success' => false,
                 'message' => 'Bạn không có quyền thực hiện thao tác này.',
@@ -203,12 +206,13 @@ class PostController extends Controller
 
 
     // =========================================================
-    // [AJAX] Xóa comment bài đăng (dành cho post_moderator/admin)
+    // [AJAX] Xóa comment bài đăng (dành cho post_moderator)
     // Route: DELETE /admin/delete_post_comment/{comment_id}
     // =========================================================
     public function delete_post_comment(string $comment_id)
     {
-        if (!$this->checkPermission()) {
+        $moderator = Auth::guard('moderator')->user();
+        if ($moderator->permission !== 'post_moderator') {
             return response()->json([
                 'success' => false,
                 'message' => 'Bạn không có quyền thực hiện thao tác này.',

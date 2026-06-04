@@ -3,9 +3,6 @@
     Quản lý bài đăng
 @endsection
 @section('moderator_profile_component')
-@php
-    $moderator = auth()->guard('moderator')->user()
-@endphp
 <div class="p-2 mt-2">
     <h2 class="text-center">Danh sách bài đăng</h2>
 

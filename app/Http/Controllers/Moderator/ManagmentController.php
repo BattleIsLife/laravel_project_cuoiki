@@ -149,7 +149,7 @@ class ManagmentController extends Controller
     public function user_list(Request $request)
     {
         $moderator = Auth::guard('moderator')->user();
-        if ($moderator->permission !== "user_moderator") {
+        if ($moderator->permission !== "user_moderator" && $moderator->permission !== "admin") {
             return redirect()->route('admin.dashboard')->with('error', 'Bạn không có quyền truy cập vào mục này');
         }
 
@@ -216,7 +216,7 @@ class ManagmentController extends Controller
     public function fiction_list(Request $request)
     {
         $moderator = Auth::guard('moderator')->user();
-        if ($moderator->permission !== "user_moderator") {
+        if ($moderator->permission !== "user_moderator" && $moderator->permission !== "admin") {
             return redirect()->route('admin.dashboard')->with('error', 'Bạn không có quyền truy cập vào mục này');
         }
 
@@ -233,14 +233,14 @@ class ManagmentController extends Controller
             ->paginate(20)
             ->withQueryString();
 
-         return view('admin.profile.all_fictions', compact('fictions', 'keyword'));
+         return view('admin.profile.all_fictions', compact('fictions', 'keyword', 'moderator'));
     }
 
     // Danh sách series
     public function series_list(Request $request)
     {
         $moderator = Auth::guard('moderator')->user();
-        if ($moderator->permission !== "user_moderator") {
+        if ($moderator->permission !== "user_moderator" && $moderator->permission !== "admin") {
             return redirect()->route('admin.dashboard')->with('error', 'Bạn không có quyền truy cập vào mục này');
         }
 
@@ -256,7 +256,7 @@ class ManagmentController extends Controller
             ->paginate(20)
             ->withQueryString();
 
-        return view('admin.profile.all_series', compact('allSeries', 'keyword'));
+        return view('admin.profile.all_series', compact('allSeries', 'keyword', 'moderator'));
     }
 
     // Xử lý AJAX xóa series

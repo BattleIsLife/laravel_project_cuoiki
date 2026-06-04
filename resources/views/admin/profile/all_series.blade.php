@@ -35,6 +35,7 @@
                     <p>Tác giả: <i>{{ $series->author->username }}</i></p>
                     <p>Ngày đăng tải: <i>{{ $series->created_at }}</i></p>
                     <p>Cập nhật lần cuối: <i>{{ $series->updated_at }}</i></p>
+                    @if ($moderator->permission === 'user_moderator')
                     <div>
                         <a class="btn btn-danger delete-btn" style="width: fit-content; height: fit-content;" 
                            data-bs-toggle="modal"
@@ -45,6 +46,7 @@
                             Xóa series
                         </a>
                     </div>
+                    @endif
                 </div>
             </div>
         @endforeach

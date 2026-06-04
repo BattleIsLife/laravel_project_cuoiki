@@ -30,7 +30,9 @@
                 <th>Email</th>
                 <th>Ngày đăng ký</th>
                 <th>Trạng thái</th>
+                @if ($moderator->permission === 'user_moderator')
                 <th>Tùy chọn</th>
+                @endif
             </tr>
         </thead>
         <tbody>
@@ -47,6 +49,7 @@
                         $stt++;
                     @endphp
                     <td>{{ $user->status }}</td>
+                    @if ($moderator->permission === 'user_moderator')
                     <td><button type="button" 
                                 class="btn btn-danger" 
                                 data-bs-toggle="modal" 
@@ -57,6 +60,7 @@
                             Hành động
                         </button>
                     </td>
+                    @endif
                 </tr>
             @empty
                 <tr><td colspan="5" class="text-center">Chưa có người dùng nào</td></tr>

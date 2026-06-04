@@ -15,8 +15,8 @@
                     <a class="nav-link" href="{{ route('admin.dashboard') }}">Dashboard</a>
                 </li>
 
-                {{-- Chỉ user moderator --}}
-                @if ($moderator->permission === 'user_moderator')
+                {{-- User moderator & admin--}}
+                @if ($moderator->permission === 'user_moderator' || $moderator->permission === 'admin')
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('admin.fiction_list') }}">Danh sách truyện</a>
                     </li>
@@ -28,8 +28,8 @@
                     </li>
                 @endif
 
-                {{-- Trừ none ra --}}
-                @if ($moderator->permission !== 'none')
+                {{-- post moderator & admin --}}
+                @if ($moderator->permission === 'post_moderator' || $moderator->permission === 'admin')
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('admin.post_list') }}">Danh sách bài đăng</a>
                     </li>
