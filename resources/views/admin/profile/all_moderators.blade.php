@@ -104,7 +104,7 @@
             <!-- Modal footer -->
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="close_btn(this)">Close</button>
-                <button type="submit" class="btn btn-success">Thay đổi</button>
+                <button type="submit" class="btn btn-success" id="changingPermission">Thay đổi</button>
         </form>
                 <form action="" method="post" id="toggleDeleteForm">
                     @csrf

@@ -29,17 +29,21 @@ async function get_user_info(btn)
     const change_info_form = document.getElementById('changeUserInfoForm');
     const toggle_delete_form = document.getElementById('toggleDeleteForm');
     const toggle_delete_btn = document.getElementById('toggleDeleteButton');
+    const change_permission_btn = document.getElementById('changingPermission');
+
     change_info_form.setAttribute('action', `${BASE_URL}/admin/change_permission/${id}`);
     toggle_delete_form.setAttribute('action', `${BASE_URL}/admin/toggle_moderator/${id}`);
     if(moderator.deleted_at === null)
     {
         toggle_delete_btn.textContent = "Vô hiệu hóa tài khoản này!!";
         permission.disabled = false;
+        change_permission_btn.disabled = false;
     }
     else
     {
         toggle_delete_btn.textContent = "Khôi phục tài khoản này!!";
         permission.disabled = true;
+        change_permission_btn.disabled = true;
     }
 }
 
