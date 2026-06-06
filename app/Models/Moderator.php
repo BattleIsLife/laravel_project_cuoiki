@@ -38,4 +38,23 @@ class Moderator extends Authenticatable
     {
         return $this->hasMany(ModeratorPost::class, 'moderator_id');
     }
+
+    // Tự động sinh ra thuộc tính ảo mang tên permission_name
+    public function getPermissionNameAttribute()
+    {
+        if($this->deleted_at)
+        {
+            return "Đã xóa";
+        }
+        switch ($this->permission) {
+            case 'admin':
+                return 'Admin';
+            case 'user_moderator':
+                return 'Quản trị người dùng';
+            case 'post_moderator':
+                return 'Quản trị bài đăng';
+            default:
+                return 'Không có';
+        }
+    }
 }

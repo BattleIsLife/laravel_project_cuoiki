@@ -3,9 +3,6 @@
     Quản lý bài đăng
 @endsection
 @section('moderator_profile_component')
-@php
-    $moderator = auth()->guard('moderator')->user()
-@endphp
 <div class="p-2 mt-2">
     <h2 class="text-center">Danh sách bài đăng</h2>
 
@@ -36,11 +33,13 @@
         <button class="btn btn-success" type="submit">Search</button>
     </form>
 
-    <div class="container d-flex justify-content-end mt-3">
-        <a class="btn btn-success" style="width: fit-content" href="{{ route('admin.new_post') }}">
-            Thêm bài đăng mới
-        </a>
-    </div>
+    @if ($moderator->permission === 'post_moderator')
+        <div class="container d-flex justify-content-end mt-3">
+            <a class="btn btn-success" style="width: fit-content" href="{{ route('admin.new_post') }}">
+                Thêm bài đăng mới
+            </a>
+        </div>
+    @endif
 
     <div class="d-flex flex-column">
         @forelse ($posts as $post)
@@ -73,7 +72,7 @@
                 @endif
             </div>
         @empty
-            <div class="alert alert-info mt-3 text-center">Chưa có bài đăng nào, bấm Thêm bài đăng mới để thêm bài đăng.</div>
+            <div class="alert alert-info mt-3 text-center">Chưa có bài đăng nào</div>
         @endforelse
     </div>
 </div>

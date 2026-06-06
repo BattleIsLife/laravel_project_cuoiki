@@ -3,9 +3,6 @@
 @section('title')
     Xóa tài khoản
 @endsection
-@php
-    $user = auth()->guard('web')->user();
-@endphp
 <div class="container p-4 mt-5">
 <div class="container-sm card p-4">
     <form action="{{ @url('/author/delete_account') }}" method="post" id="deleteForm">

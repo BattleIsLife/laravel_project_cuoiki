@@ -22,7 +22,7 @@
                 <a href="{{ route('fiction.detail', $fiction->id) }}">
                     <img src="{{ $fiction->image_link ? asset('storage/' . $fiction->image_link) : asset('logo/favicon.jpeg') }}" alt="{{ $fiction->fiction_name }}" style="width: 108px; height: 170px; object-fit: cover;">
                 </a>
-                <h5 class="text-center"><a href="{{ route('fiction.detail', $fiction->id) }}" class="fiction_series_link">{{ $fiction->fiction_name }}</a></h5>
+                <h5 class="text-center"><a href="{{ route('fiction.detail', $fiction->id) }}" class="fiction_series_link text-truncate d-block" title="{{ $fiction->fiction_name }}">{{ $fiction->fiction_name }}</a></h5>
                 <p class="mb-1">Tác giả: <strong>{{ $fiction->author->username ?? 'Không rõ' }}</strong></p>
                 <p class="mb-1">Lượt thích: {{ $fiction->like_fiction_history_count }}</p>
             </div>

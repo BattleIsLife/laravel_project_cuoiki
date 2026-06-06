@@ -14,6 +14,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\SeriesController;
 use App\Http\Controllers\Moderator\ManagmentController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Moderator\PostController;
 
 Route::controller(HomeController::class)->group(function(){
     // Trang chủ
@@ -23,6 +24,10 @@ Route::controller(HomeController::class)->group(function(){
     // About me
     Route::get('/about_me', 'about_me')->name('about_me');
 });
+
+
+// Route truy cập bài đăng
+Route::get('/post/{post_id}', [PostController::class,'show'])->name('post.detail');
 
 
 // Route xử lý truyện
@@ -41,7 +46,7 @@ Route::controller(SeriesController::class)->group(function(){
 
 
 // Route xử lý chương
-Route::get('/chapter/{chapterId}', [ChapterController::class, 'show']);
+Route::get('/chapter/{chapterId}', [ChapterController::class, 'show'])->name('chapter.detail');
 
 
 // Route xử lý tương tác AJAX: like truyện/chương, vote bình luận
@@ -97,6 +102,9 @@ Route::prefix('author')->middleware('check.user.login')->group(function(){
     Route::put('/edit_fiction/{fictionId}/edit_chapter/{chapterId}', [AuthorChapterController::class, 'update']);
     // Xóa chương
     Route::delete('/edit_fiction/{fictionId}/delete_chapter/{chapterId}', [AuthorChapterController::class, 'destroy']);
+
+    // Preview chương truyện
+    Route::get('/chapter_preview/{chapterId}', [AuthorChapterController::class, 'preview'])->name('chapter.preview');
 
 
     // Series
@@ -176,27 +184,26 @@ Route::prefix('admin')->group(function(){
             // Thay đổi thông tin
             Route::get('/change_info', 'showChangeInfo')->name('admin.change_info');
             Route::put('/change_info', 'change_info');
+
+            // Vô hiệu/khổi phục tài khoản của moderator
+            Route::post('/toggle_moderator/{moderator_id}', 'toggleModeratorDelete');
+
+            // API lấy thông tin moderator
+            Route::post('/get_moderator_info/{mod_id}', 'getModerator');
+
+            // APIT lấy thông tin user
+            Route::post('/get_user_info/{id}', 'get_user_info');
         });
 
 
-        // Post moderator (để lúc nào xong thì sửa lại route)
-        // Route::controller(PostController::class)->group(function(){
-        //     // Danh sách bài đăng
-        //     Route::get('/post_list', 'showAllPost')->name('admin.post_list');
-
-        //     // Thêm bài đăng mói
-        //     Route::get('/new_post', 'showNewPost')->name('admin.new_post');
-        //     Route::post('/new_post', 'new_post');
-
-        //     // Sửa bài đăng
-        //     Route::get('/edit_post/{post_id}', 'showEditPost')->name('admin.edit_post');
-        //     Route::post('/edit_post/{post_id}', 'edit_post');
-
-        //     // Xóa bài đăng
-        //     Route::delete('/delete_post/{post_id}', 'delete_post');
-
-        //     // Xóa comment bài đăng
-        //     Route::delete('/delete_post_comment/{comment_id}', 'delete_post_comment');
-        // });
+       Route::controller(PostController::class)->group(function(){
+            Route::get('/post_list', 'showAllPost')->name('admin.post_list');
+            Route::get('/new_post', 'showNewPost')->name('admin.new_post');
+            Route::post('/new_post', 'new_post');
+            Route::get('/edit_post/{post_id}', 'showEditPost')->name('admin.edit_post');
+            Route::post('/edit_post/{post_id}', 'edit_post');
+            Route::delete('/delete_post/{post_id}', 'delete_post');
+            Route::delete('/delete_post_comment/{comment_id}', 'delete_post_comment');
+        });
     });
 });

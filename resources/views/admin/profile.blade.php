@@ -6,11 +6,6 @@
         display: none;
     }
 </style>
-@php
-    // Tính toán quyền hạn
-    $moderator = auth()->guard('moderator')->user();
-    $permission = $moderator->permission;
-@endphp
 <div class="container-fluid p-3">
     <div class="row">
         <div class="col-sm-3">
@@ -20,8 +15,8 @@
                     <a class="nav-link" href="{{ route('admin.dashboard') }}">Dashboard</a>
                 </li>
 
-                {{-- Chỉ user moderator --}}
-                @if ($permission === 'user_moderator')
+                {{-- User moderator & admin--}}
+                @if ($moderator->permission === 'user_moderator' || $moderator->permission === 'admin')
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('admin.fiction_list') }}">Danh sách truyện</a>
                     </li>
@@ -33,15 +28,15 @@
                     </li>
                 @endif
 
-                {{-- Chỉ post moderator --}}
-                @if ($permission === 'post_moderator')
+                {{-- post moderator & admin --}}
+                @if ($moderator->permission === 'post_moderator' || $moderator->permission === 'admin')
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('admin.post_list') }}">Danh sách bài đăng</a>
                     </li>
                 @endif
 
                 {{-- Chỉ admin --}}
-                @if ($permission === 'admin')
+                @if ($moderator->permission === 'admin')
                     <li class="nav-item mt-3">
                         <a class="nav-link bg-secondary text-white" href="{{ route('admin.moderator_list') }}">Danh sách quản trị viên</a>
                     </li>

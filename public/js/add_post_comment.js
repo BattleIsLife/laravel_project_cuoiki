@@ -18,6 +18,8 @@ document.getElementById('commentForm').addEventListener('submit', async function
         return;   
     }
 
+    submitComment.disabled = true;
+
     const response = await fetch(`${BASE_URL}/moderator_posts/${POST_ID}/comments`, {
         method: 'POST',
         headers: {
@@ -28,7 +30,6 @@ document.getElementById('commentForm').addEventListener('submit', async function
         body: formData
     });
 
-    submitComment.disabled = true;
     const data = await response.json();
 
     // Không xử lý nếu bình luận thất bại
@@ -57,12 +58,11 @@ function addCommentToList(comment) {
             <textarea class="form-control" disabled readonly required rows="6" >${comment.content}</textarea>
             <div class="mt-2 reply_comment"><button class="btn btn-primary" onclick="reply_comment(this, '${comment.id}')">Phản hồi bình luận</button></div>
             <div class="d-flex flex-row mt-2">
-                <button class="btn btn-success" data-id="${comment.id}" onclick="upvote_post_comment(this, 1)">Upvote</button>
-                <button class="btn btn-danger" data-id="${comment.id}" onclick="upvote_post_comment(this, -1)">Downvote</button>
+                <button class="btn btn-success" onclick="upvote_post_comment(this, 1)">Upvote</button>
+                <button class="btn btn-danger" onclick="upvote_post_comment(this, -1)">Downvote</button>
                 <button class="btn btn-secondary" 
                         data-bs-toggle="modal"
                         data-bs-target="#userDeleteCommentModal" 
-                        data-id="${comment.id}" 
                         onclick="user_delete_comment(this)">
                         Gỡ bình luận
                 </button>
@@ -122,6 +122,14 @@ async function add_child_to_comment(btn, comment_id) {
         return;   
     }
 
+    // Lấy thẻ div chứa tất cả các nút và vô hiệu hóa trong quá trình gửi, tránh bấm nhiều hơn 1 lần
+    const parent_div = btn.closest('.main-comment-wrapper');
+    const all_btn = parent_div.querySelectorAll('button');
+    for (let i = 0; i < all_btn.length; i++) {
+        const element = all_btn[i];
+        element.disabled = true;
+    }
+
     // data gửi đi lên server
     const payload = {
         parent_comment: comment_id,
@@ -137,14 +145,6 @@ async function add_child_to_comment(btn, comment_id) {
         },
         body: JSON.stringify(payload)
     });
-
-    // Lấy thẻ div chứa tất cả các nút và vô hiệu hóa trong quá trình gửi, tránh bấm nhiều hơn 1 lần
-    const parent_div = btn.closest('.main-comment-wrapper');
-    const all_btn = parent_div.querySelectorAll('button');
-    for (let i = 0; i < all_btn.length; i++) {
-        const element = all_btn[i];
-        element.disabled = true;
-    }
 
     const data = await response.json();
 
@@ -170,12 +170,11 @@ async function add_child_to_comment(btn, comment_id) {
             </div>
             <textarea class="form-control" disabled readonly required rows="6" >${comment.content}</textarea>
             <div class="d-flex flex-row mt-2">
-                <button class="btn btn-success" data-id="${comment.id}" onclick="upvote_post_comment(this, 1)">Upvote</button>
-                <button class="btn btn-danger" data-id="${comment.id}" onclick="upvote_post_comment(this, -1)">Downvote</button>
+                <button class="btn btn-success" onclick="upvote_post_comment(this, 1)">Upvote</button>
+                <button class="btn btn-danger" onclick="upvote_post_comment(this, -1)">Downvote</button>
                 <button class="btn btn-secondary" 
                         data-bs-toggle="modal"
                         data-bs-target="#userDeleteCommentModal" 
-                        data-id="${comment.id}"
                         onclick="user_delete_comment(this)">
                         Gỡ bình luận
                 </button>

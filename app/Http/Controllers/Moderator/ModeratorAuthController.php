@@ -26,16 +26,16 @@ class ModeratorAuthController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->validate([
-            'username' => 'required|string|min:3|max:50',
+            'email' => 'required|email',
             'password' => 'required|string|min:6|max:50',
         ], [
-            'username.required' => 'Vui lòng nhập username.',
+            'email.required' => 'Vui lòng nhập email.',
             'password.required' => 'Vui lòng nhập mật khẩu.',
         ]);
 
         // Kiểm tra tài khoản có bị xóa không
         $moderator = Moderator::withTrashed()
-            ->where('username', $credentials['username'])
+            ->where('email', $credentials['email'])
             ->first();
 
         if ($moderator && $moderator->trashed()) {

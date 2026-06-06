@@ -34,8 +34,6 @@ async function confirm_delete(btn) {
         const result = await response.json();
 
         if (response.ok && result.success) {
-            // Lấy thông báo thành công từ Controller hiển thị ra (Tùy chọn)
-            alert(result.message); 
 
             // 5. Xóa phần tử trên giao diện (Khớp class cha của dòng series, ví dụ '.series-item' hoặc '.fiction')
             const delete_button_with_id = document.querySelector(`a[data-id="${id}"]`);

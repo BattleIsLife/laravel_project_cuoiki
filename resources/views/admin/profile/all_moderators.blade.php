@@ -4,7 +4,7 @@
 @endsection
 @section('moderator_profile_component')
 <div class="text-center">
-    <h2>Danh sách người dùng</h2>
+    <h2>Danh sách quản trị viên</h2>
     @if (session()->has('error'))
             <div class="alert alert-danger">
                 {{ session()->get('error') }}
@@ -37,45 +37,23 @@
             @php
                 $stt = 1;
             @endphp
-            @forelse ($moderators as $moderator)
+            @forelse ($moderators as $mod)
                 <tr>
                     <td>{{ $stt }}</td>
-                    <td>{{ $moderator->username }}</td>
-                    <td>{{ $moderator->email }}</td>
-                    <td>{{ $moderator->created_at }}</td>
+                    <td>{{ $mod->username }}</td>
+                    <td>{{ $mod->email }}</td>
+                    <td>{{ $mod->created_at }}</td>
                     @php
                         $stt++;
-                        // Tính toán quyền hạn
-                        $permission = $moderator->permission;
-                        $permission_name = "";
-                        $permission_level = 0;
-                        switch ($permission) {
-                            case 'admin':
-                                $permission_name = 'Admin';
-                                break;
-                            
-                            case 'user_moderator':
-                                $permission_name = 'Quản trị người dùng';
-                                break;
-
-                            case 'post_moderator':
-                                $permission_name = 'Quản trị bài đăng';
-                                break;
-                            default:
-                                $permission_name = 'Không có';
-                        }
                     @endphp
-                    <td>{{ $permission_name }}</td>
+                    <td>{{ $mod->permission_name }}</td>
                     <td><button type="button" 
                                 class="btn btn-danger" 
                                 data-bs-toggle="modal" 
                                 data-bs-target="#changeInfoModal"
-                                data-id="{{ $moderator->id }}"
-                                data-username="{{ $moderator->username }}"
-                                data-email="{{ $moderator->email }}"
-                                data-permission="{{ $moderator->permission }}"
+                                data-id="{{ $mod->id }}"
                                 onclick="get_user_info(this)"
-                                @if ($moderator->permission === 'admin') disabled @endif>
+                                @if ($mod->permission === 'admin') disabled @endif>
                             Hành động
                         </button></td>
                 </tr>
@@ -95,7 +73,7 @@
             @method('put')
             <!-- Modal Header -->
             <div class="modal-header">
-            <h4 class="modal-title">Thay đổi vai trò của moderator</h4>
+            <h4 class="modal-title">Tùy chọn moderator</h4>
             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
 
@@ -104,12 +82,12 @@
                 <div class="mb-3 mt-3">
                     <label for="username" class="form-label">Tên người dùng:</label>
                     <input type="text" class="form-control" disabled
-                            id="username" name="username" readonly value="Tên người dùng ở đây!!">
+                            id="username" name="username" readonly value="">
                 </div>
 
                 <div class="mb-3 mt-3">
                     <label for="email" class="form-label">Email:</label>
-                    <input type="email" class="form-control" id="email" disabled readonly value="Email ở đây">
+                    <input type="email" class="form-control" id="email" disabled readonly value="">
                     <div class="invalid-feedback" id="emailError"></div>
                 </div>
 
@@ -125,10 +103,15 @@
 
             <!-- Modal footer -->
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" onclick="close_btn(this)">Close</button>
-                <button type="submit" class="btn btn-success">Thay đổi</button>
-            </div>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="close_btn(this)">Close</button>
+                <button type="submit" class="btn btn-success" id="changingPermission">Thay đổi</button>
         </form>
+                <form action="" method="post" id="toggleDeleteForm">
+                    @csrf
+                    <button type="submit" class="btn btn-secondary" id="toggleDeleteButton"></button>
+                </form>
+            </div>
+        
     </div>
   </div>
 </div>
@@ -139,6 +122,7 @@
 
 <script>
     const BASE_URL = "{{ url('/') }}";
+    const CSRF_TOKEN = "{{ csrf_token() }}"
 </script>
 <script src="{{ @asset('js/moderator/moderator_info.js') }}"></script>
 @endsection

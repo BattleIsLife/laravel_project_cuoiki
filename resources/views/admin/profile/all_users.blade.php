@@ -30,7 +30,9 @@
                 <th>Email</th>
                 <th>Ngày đăng ký</th>
                 <th>Trạng thái</th>
+                @if ($moderator->permission === 'user_moderator')
                 <th>Tùy chọn</th>
+                @endif
             </tr>
         </thead>
         <tbody>
@@ -45,25 +47,20 @@
                     <td>{{ $user->created_at }}</td>
                     @php
                         $stt++;
-                        $status = "Còn hoạt động";
-                        if($user->deleted_at)
-                            $status = "Đã xóa";
-                        if($user->blocked_until)
-                            $status = "Bị chặn";
                     @endphp
-                    <td>{{ $status }}</td>
+                    <td>{{ $user->status }}</td>
+                    @if ($moderator->permission === 'user_moderator')
                     <td><button type="button" 
                                 class="btn btn-danger" 
                                 data-bs-toggle="modal" 
                                 data-bs-target="#changeInfoModal"
                                 data-id="{{ $user->id }}"
-                                data-username="{{ $user->username }}"
-                                data-email="{{ $user->email }}"
-                                data-blocked-until="{{ $user->blocked_until }}"
+                                @if ($user->deleted_at) disabled  @endif
                                 onclick="get_user_info(this)">
                             Hành động
                         </button>
                     </td>
+                    @endif
                 </tr>
             @empty
                 <tr><td colspan="5" class="text-center">Chưa có người dùng nào</td></tr>
@@ -120,6 +117,7 @@
 </div>
 <script>
     const BASE_URL = "{{ url('/') }}";
+    const CSRF_TOKEN = "{{ csrf_token() }}";
 </script>
 <script src="{{ @asset('js/moderator/user_info.js') }}"></script>
 

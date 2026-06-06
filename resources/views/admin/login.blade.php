@@ -30,10 +30,10 @@
         @endif
 
         <div class="mb-3 mt-3">
-            <label for="username" class="form-label">Tên người dùng:</label>
+            <label for="email" class="form-label">Email:</label>
             <input type="text" class="form-control" 
-                    id="username" placeholder="Nhập tên người dùng" name="username">
-            <div class="invalid-feedback" id="usernameError"></div>
+                    id="email" placeholder="Nhập email" name="email">
+            <div class="invalid-feedback" id="emailError"></div>
         </div>
 
         <div class="mb-3">
@@ -42,6 +42,11 @@
                     id="password" placeholder="Nhập mật khẩu" name="password">
             <div class="invalid-feedback" id="passwordError"></div>
         </div>
+
+        <label class="form-check-label mb-3">
+            <input class="form-check-input" type="checkbox" name="remember">
+            Remember me!!
+        </label>
 
 
         <button type="submit" class="btn btn-success w-100" name="login">Đăng nhập</button>

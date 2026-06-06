@@ -9,18 +9,19 @@ document.getElementById('loginForm').addEventListener('submit', function(e){
         });
 
         // Lấy giá trị
-        const username = document.getElementById('username').value;
+        const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
 
-        // Validate username
-        if (username === '') {
+        // Validate email
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (email === '') {
+            showError('email', 'Vui lòng nhập email');
             isValid = false;
-            showError('username', 'Vui lòng nhập tên người dùng');
-        }
-        else if (username.length > 50) {
+        } else if (!emailRegex.test(email)) {
+            showError('email', 'Email không hợp lệ');
             isValid = false;
-            showError('username', 'Độ dài của tên người dùng quá dài');
         }
+
 
         // Validate password
         if (password === '') {
