@@ -21,7 +21,7 @@
 {{-- Chỉ dành cho admin --}}
 @if ($moderator->permission === 'admin')
     <div class="card p-3 mb-4 bg-white shadow-sm">
-        <form action="{{ url()->current() }}" method="GET" class="d-flex align-items-center flex-nowrap gap-3 row-gap-0">
+        <form action="{{ url()->current() }}" method="GET" class="d-flex align-items-center flex-wrap gap-3 row-gap-3">
             
             <div class="col-auto">
                 <label class="fw-bold text-secondary mb-0 text-nowrap">Bộ lọc khoảng thời gian:</label>
