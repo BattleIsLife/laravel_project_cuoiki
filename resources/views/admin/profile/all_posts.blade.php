@@ -72,7 +72,7 @@
                 @endif
             </div>
         @empty
-            <div class="alert alert-info mt-3 text-center">Chưa có bài đăng nào, bấm Thêm bài đăng mới để thêm bài đăng.</div>
+            <div class="alert alert-info mt-3 text-center">Chưa có bài đăng nào</div>
         @endforelse
     </div>
 </div>
