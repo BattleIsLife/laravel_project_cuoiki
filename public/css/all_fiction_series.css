@@ -22,8 +22,8 @@
 
 .fiction_series h5
 {
-    height: 50px;
-    overflow-y: scroll;
+    /* height: 50px; */
+    max-width: 230px;
 }
 
 a.fiction_series_link

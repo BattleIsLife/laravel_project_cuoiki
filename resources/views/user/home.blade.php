@@ -34,7 +34,7 @@
                         <a href="{{ route('fiction.detail', $fiction->id) }}">
                             <img src="{{ $fiction->image_link ? asset('storage/' . $fiction->image_link) : asset('logo/favicon.jpeg') }}" alt="{{ $fiction->fiction_name }}" style="width: 108px; height: 170px; object-fit: cover;">
                         </a>
-                        <h5 class="text-center"><a href="{{ route('fiction.detail', $fiction->id) }}" class="fiction_series_link">{{ $fiction->fiction_name }}</a></h5>
+                        <h5 class="text-center"><a href="{{ route('fiction.detail', $fiction->id) }}" class="fiction_series_link text-truncate d-block" title="{{ $fiction->fiction_name }}">{{ $fiction->fiction_name }}</a></h5>
                         <p class="mb-1">Tác giả: <strong>{{ $fiction->author->username ?? 'Không rõ' }}</strong></p>
                         <p class="mb-1">Lượt thích: {{ $fiction->like_fiction_history_count }}</p>
                     </div>
@@ -54,7 +54,7 @@
                         <a href="{{ route('home') }}">
                             <img src="{{ $series->image_link ? asset('storage/' . $series->image_link) : asset('logo/favicon.jpeg') }}" alt="{{ $series->series_name }}" style="width: 108px; height: 170px; object-fit: cover;">
                         </a>
-                        <h5 class="text-center"><a href="{{ route('series.detail', $series->id) }}" class="fiction_series_link">{{ $series->series_name }}</a></h5>
+                        <h5 class="text-center"><a href="{{ route('series.detail', $series->id) }}" class="fiction_series_link text-truncate d-block" title="{{ $series->series_name }}">{{ $series->series_name }}</a></h5>
                         <p class="mb-1">Tác giả: <strong>{{ $series->author->username ?? 'Không rõ' }}</strong></p>
                         <p class="mb-1">Lượt xem: {{ $series->chapters_sum_watch_count ?? 0 }}</p>
                     </div>
