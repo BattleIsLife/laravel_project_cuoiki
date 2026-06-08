@@ -15,7 +15,7 @@
         <h4>Viết bình luận ở đây</h4>
         @if (!$user) <p>Vui lòng đăng nhập để bình luận</p> @endif
         <textarea class="form-control" rows="4" id="comment_content" name="content" @if (!$user) disabled @endif></textarea>
-        <p><small>Lời nói của bạn có trọng lượng. Hãy cẩn thận nếu không là TÙ NGAY</small></p>
+        <p><small>Lời nói của bạn có trọng lượng. Xin hãy hành xử có văn hóa</small></p>
         <button type="submit" class="btn btn-success mt-3" id="submit_comment" @if (!$user) disabled @endif >Đăng tải bình luận</button>
     </form>
 
@@ -110,7 +110,7 @@
                 </div>
             </div>
         @empty
-            <p id="no_comment_message"><small>Chưa có bình luận, hãy bình luận đi :)</small></p>
+            <p id="no_comment_message"><small>Chưa có bình luận nào</small></p>
         @endforelse
         <div class="d-flex justify-content-center mt-4">
             {{ $comments->links('pagination::bootstrap-5') }}
