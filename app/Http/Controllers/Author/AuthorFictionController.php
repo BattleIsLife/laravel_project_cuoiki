@@ -91,9 +91,10 @@ class AuthorFictionController extends Controller
             ->where('user_id', Auth::guard('web')->user()->id)
             ->firstOrFail();
 
-        if ($fiction->image_link !== "default.jpeg") {
-            Storage::disk('public')->delete($fiction->image_link);
-        }
+        if($fiction->image_link)
+            if ($fiction->image_link !== "default.jpeg") {
+                Storage::disk('public')->delete($fiction->image_link);
+            }
 
         $fiction->delete();
 

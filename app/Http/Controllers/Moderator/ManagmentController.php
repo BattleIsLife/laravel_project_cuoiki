@@ -292,9 +292,10 @@ class ManagmentController extends Controller
         $fiction = Fiction::whereId($fiction_id)
             ->firstOrFail();
 
-        if ($fiction->image_link !== "default.jpeg") {
-            Storage::disk('public')->delete($fiction->image_link);
-        }
+        if($fiction->image_link)
+            if ($fiction->image_link !== "default.jpeg") {
+                Storage::disk('public')->delete($fiction->image_link);
+            }
 
         if($fiction->delete())
             return response()->json([
